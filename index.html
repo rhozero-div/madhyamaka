@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中觀論 · 印度、中國、日本的中觀學總覽</title>
+<meta name="description" content="以資料庫「中觀論」十二部典籍為底本，梳理中觀學在印度、中國、日本的發展、經論與人物。">
+<style>
+:root{
+  --paper:#f6f2e9;
+  --paper-2:#fbf8f1;
+  --paper-3:#efe9dc;
+  --ink:#211e19;
+  --ink-2:#544d3f;
+  --ink-3:#8a8172;
+  --line:rgba(33,30,25,.13);
+  --line-2:rgba(33,30,25,.07);
+  --red:#9c3a30;
+  --red-soft:#c2695a;
+  --jade:#2d5d55;
+  --gold:#a3854a;
+  --maxw:1120px;
+  --serif:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC","Songti TC",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:17px;line-height:1.9;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(circle at 12% -8%, rgba(163,133,74,.10), transparent 42%),
+    radial-gradient(circle at 92% 4%, rgba(156,58,48,.06), transparent 38%);
+  background-attachment:fixed;
+}
+::selection{background:rgba(156,58,48,.14)}
+a{color:inherit;text-decoration:none}
+img,svg{max-width:100%}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+/* ---------- progress ---------- */
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--gold),var(--red));z-index:120;transition:width .1s linear}
+
+/* ---------- header ---------- */
+header.top{
+  position:sticky;top:0;z-index:100;
+  background:rgba(246,242,233,.88);
+  backdrop-filter:saturate(160%) blur(12px);
+  -webkit-backdrop-filter:saturate(160%) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.top-in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;flex:none}
+.seal{
+  width:34px;height:34px;border:1px solid var(--red);color:var(--red);
+  display:grid;place-items:center;font-size:18px;border-radius:3px;
+  letter-spacing:0;line-height:1;padding-top:1px;
+  background:rgba(156,58,48,.04);
+}
+.brand b{font-size:17px;font-weight:600;letter-spacing:.16em;display:block;line-height:1.3}
+.brand em{font-family:var(--sans);font-style:normal;font-size:10px;letter-spacing:.22em;color:var(--ink-3);text-transform:uppercase}
+nav.menu{display:flex;gap:2px;flex-wrap:wrap}
+nav.menu a{
+  font-family:var(--sans);font-size:12.5px;letter-spacing:.1em;color:var(--ink-2);
+  padding:8px 11px;border-radius:4px;transition:.2s;white-space:nowrap;
+}
+nav.menu a:hover{background:rgba(33,30,25,.05);color:var(--ink)}
+nav.menu a.on{color:var(--red);background:rgba(156,58,48,.07)}
+
+/* ---------- hero ---------- */
+.hero{padding:78px 0 60px;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.35fr .85fr;gap:56px;align-items:center}
+.kicker{font-family:var(--sans);font-size:11px;letter-spacing:.34em;color:var(--gold);text-transform:uppercase;margin:0 0 22px}
+h1.big{
+  font-size:clamp(46px,7vw,78px);line-height:1.06;margin:0 0 6px;
+  letter-spacing:.06em;font-weight:600;
+}
+h1.big .char{display:inline-block}
+.sub{font-size:clamp(15px,2vw,19px);color:var(--ink-2);margin:22px 0 0;letter-spacing:.04em;line-height:1.85}
+.sub b{color:var(--ink);font-weight:600}
+.hero-meta{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px}
+.hero-meta div{font-family:var(--sans);font-size:11.5px;color:var(--ink-3);letter-spacing:.1em}
+.hero-meta strong{display:block;font-family:var(--serif);font-size:24px;color:var(--ink);letter-spacing:.02em;font-weight:600;margin-bottom:2px}
+.verse-card{
+  border:1px solid var(--line);background:linear-gradient(180deg,#fffdf7,#f8f4ea);
+  padding:34px 30px 26px;border-radius:4px;position:relative;
+  box-shadow:0 18px 44px -30px rgba(33,30,25,.5);
+}
+.verse-card::before{
+  content:"";position:absolute;inset:7px;border:1px solid var(--line-2);border-radius:2px;pointer-events:none;
+}
+.v-title{font-family:var(--sans);font-size:10.5px;letter-spacing:.26em;color:var(--ink-3);margin-bottom:20px;text-align:center}
+.verse-wrap{display:flex;justify-content:center;height:252px}
+.verse-v{
+  writing-mode:vertical-rl;text-orientation:upright;
+  font-size:19px;letter-spacing:.16em;line-height:1.65;color:var(--ink);
+  height:100%;
+}
+.verse-v span{display:block;padding-left:13px}
+.v-src{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;color:var(--ink-3);text-align:center;margin-top:18px}
+
+/* ---------- section shell ---------- */
+section.sec{padding:86px 0;border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:14px}
+.sec-no{
+  font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:var(--red);
+  border:1px solid rgba(156,58,48,.3);border-radius:20px;padding:3px 10px;flex:none;
+}
+.sec-head h2{font-size:clamp(26px,3.4vw,36px);font-weight:600;margin:0;letter-spacing:.06em}
+.sec-head .en{font-family:var(--sans);font-size:10.5px;letter-spacing:.24em;color:var(--ink-3);text-transform:uppercase;margin-left:auto;flex:none}
+.lede{font-size:17px;color:var(--ink-2);max-width:760px;margin:0 0 44px;line-height:2}
+.lede strong{color:var(--ink);font-weight:600}
+
+/* ---------- concept cards ---------- */
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.cards-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.cc{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:4px;padding:28px 24px 24px;
+  position:relative;transition:.25s;
+}
+.cc:hover{transform:translateY(-3px);box-shadow:0 16px 34px -26px rgba(33,30,25,.65);border-color:rgba(156,58,48,.28)}
+.cc .idx{font-family:var(--sans);font-size:10px;letter-spacing:.2em;color:var(--gold)}
+.cc h3{font-size:21px;margin:10px 0 4px;letter-spacing:.1em;font-weight:600}
+.cc .sk{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase}
+.cc p{font-size:15.2px;color:var(--ink-2);margin:14px 0 0;line-height:1.95}
+.cc q{quotes:"「" "」";color:var(--red);font-style:normal}
+
+/* ---------- eight negations ---------- */
+.eight{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}
+.en-item{border-top:2px solid var(--red-soft);padding-top:14px}
+.en-item .pair{font-size:19px;letter-spacing:.14em;font-weight:600}
+.en-item .br{font-family:var(--sans);font-size:11px;color:var(--ink-3);margin-top:8px;letter-spacing:.06em;line-height:1.7}
+
+/* ---------- quote ---------- */
+blockquote.q{
+  margin:0;padding:22px 26px;background:rgba(163,133,74,.07);
+  border-left:2px solid var(--gold);font-size:16px;line-height:2;color:var(--ink);
+}
+blockquote.q cite{display:block;font-family:var(--sans);font-style:normal;font-size:11px;letter-spacing:.12em;color:var(--ink-3);margin-top:10px}
+
+/* ---------- timeline ---------- */
+.filters{display:flex;gap:8px;margin-bottom:34px;flex-wrap:wrap}
+.filters button{
+  font-family:var(--sans);font-size:12px;letter-spacing:.12em;color:var(--ink-2);
+  background:transparent;border:1px solid var(--line);border-radius:20px;
+  padding:7px 16px;cursor:pointer;transition:.2s;
+}
+.filters button:hover{border-color:rgba(33,30,25,.3)}
+.filters button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tl{position:relative}
+.ev{display:grid;grid-template-columns:126px 1fr;gap:22px;position:relative;padding:0}
+.ev-y{font-family:var(--sans);font-size:12.5px;letter-spacing:.08em;color:var(--ink-3);text-align:right;padding-top:1px;white-space:nowrap}
+.ev-b{position:relative;padding-left:22px;padding-bottom:30px;border-left:1px solid var(--line)}
+.ev:last-child .ev-b{border-left-color:transparent;padding-bottom:0}
+.ev-b::before{
+  content:"";position:absolute;left:-5px;top:7px;width:9px;height:9px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--ink-3);box-sizing:border-box;
+}
+.ev[data-c="in"] .ev-b::before{border-color:var(--gold)}
+.ev[data-c="cn"] .ev-b::before{border-color:var(--red)}
+.ev[data-c="jp"] .ev-b::before{border-color:var(--jade)}
+.ev[data-c="md"] .ev-b::before{border-color:var(--ink-3)}
+.ev h4{margin:0 0 5px;font-size:18px;font-weight:600;letter-spacing:.05em;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ev p{margin:0;font-size:15px;color:var(--ink-2);line-height:1.9;max-width:680px}
+.tag{font-family:var(--sans);font-size:10px;letter-spacing:.14em;padding:2px 8px;border-radius:2px;white-space:nowrap}
+.tag-in{color:var(--gold);background:rgba(163,133,74,.11)}
+.tag-cn{color:var(--red);background:rgba(156,58,48,.09)}
+.tag-jp{color:var(--jade);background:rgba(45,93,85,.09)}
+.tag-md{color:var(--ink-2);background:rgba(33,30,25,.06)}
+
+/* ---------- person grid ---------- */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:16px}
+.person{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:4px;padding:20px 20px 18px;
+  transition:.25s;position:relative;overflow:hidden;
+}
+.person:hover{border-color:rgba(163,133,74,.5);transform:translateY(-2px)}
+.person .nm{font-size:18px;font-weight:600;letter-spacing:.08em}
+.person .rom{font-family:var(--sans);font-size:10.5px;color:var(--ink-3);letter-spacing:.1em;margin-left:6px}
+.person .dt{font-family:var(--sans);font-size:11px;color:var(--gold);letter-spacing:.08em;margin:6px 0 10px}
+.person p{margin:0;font-size:14.2px;color:var(--ink-2);line-height:1.85}
+.person .work{font-size:12.8px;color:var(--ink-3);margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+
+/* ---------- flow / lineage ---------- */
+.flow{
+  display:flex;align-items:stretch;gap:18px;flex-wrap:wrap;
+  padding:26px 24px;background:var(--paper-2);border:1px solid var(--line);border-radius:4px;
+}
+.node{
+  flex:1 1 0;min-width:104px;padding:12px 4px;text-align:center;position:relative;
+}
+.node b{display:block;font-size:15.5px;font-weight:600;letter-spacing:.06em}
+.node small{display:block;font-family:var(--sans);font-size:10.5px;color:var(--ink-3);margin-top:4px;letter-spacing:.04em}
+.node::after{
+  content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);
+  color:var(--ink-3);font-size:12px;line-height:1;
+}
+.node:last-child::after{display:none}
+.flow.jv .node b{color:var(--jade)}
+.flow.cv .node b{color:var(--red)}
+.flow-note{font-family:var(--sans);font-size:11.5px;color:var(--ink-3);margin-top:12px;letter-spacing:.04em}
+
+/* ---------- accordion ---------- */
+.acc{border-top:1px solid var(--line)}
+.acc details{border-bottom:1px solid var(--line)}
+.acc summary{
+  list-style:none;cursor:pointer;padding:20px 4px;display:flex;align-items:center;gap:16px;
+  font-size:18px;font-weight:600;letter-spacing:.06em;transition:.2s;
+}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary:hover{color:var(--red)}
+.acc summary .no{font-family:var(--sans);font-size:11px;color:var(--gold);letter-spacing:.14em;flex:none;width:30px}
+.acc summary .plus{margin-left:auto;color:var(--ink-3);font-size:16px;transition:.3s;flex:none}
+.acc details[open] summary .plus{transform:rotate(45deg);color:var(--red)}
+.acc .body{padding:0 4px 28px 46px;font-size:15.4px;color:var(--ink-2);line-height:2;max-width:830px}
+.acc .body p{margin:0 0 14px}
+.acc .body p:last-child{margin-bottom:0}
+.acc .body .mini{font-size:14px;color:var(--ink-3);border-left:2px solid var(--line);padding-left:14px;margin:16px 0}
+
+/* ---------- 27 pin grid ---------- */
+.pin-group{margin-bottom:34px}
+.pin-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;font-size:15px;font-weight:600;letter-spacing:.06em}
+.pin-h span{font-family:var(--sans);font-size:11px;color:var(--ink-3);font-weight:400;letter-spacing:.06em}
+.pins{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.pin{
+  border:1px solid var(--line);background:var(--paper-2);border-radius:3px;
+  padding:10px 10px 9px;position:relative;overflow:hidden;transition:.2s;
+}
+.pin:hover{border-color:rgba(156,58,48,.45);background:#fffdf8}
+.pin .n{font-family:var(--sans);font-size:9.5px;color:var(--ink-3);letter-spacing:.1em}
+.pin .t{font-size:14px;letter-spacing:.04em;margin-top:2px;white-space:nowrap}
+.pin .v{font-family:var(--sans);font-size:10px;color:var(--ink-3);margin-top:3px}
+.pin i{position:absolute;left:0;bottom:0;height:2px;background:var(--red-soft);width:calc(var(--h) * 1%)}
+.pin.small i{background:var(--jade)}
+.pin.small{border-style:dashed}
+
+/* ---------- table ---------- */
+.tablewrap{border:1px solid var(--line);border-radius:4px;overflow:auto;background:var(--paper-2)}
+table{width:100%;border-collapse:collapse;font-size:14.4px;min-width:760px}
+thead th{
+  text-align:left;font-family:var(--sans);font-size:11px;letter-spacing:.14em;color:var(--ink-3);
+  font-weight:500;padding:14px 16px;border-bottom:1px solid var(--line);background:rgba(163,133,74,.06);
+  white-space:nowrap;
+}
+tbody td{padding:13px 16px;border-bottom:1px solid var(--line-2);vertical-align:top;line-height:1.7}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(163,133,74,.05)}
+td .tt{font-weight:600;letter-spacing:.03em}
+td .id{font-family:var(--sans);font-size:11px;color:var(--ink-3);letter-spacing:.04em}
+.pill{font-family:var(--sans);font-size:10px;letter-spacing:.1em;padding:2px 7px;border-radius:2px;white-space:nowrap}
+.pill.in{color:var(--gold);background:rgba(163,133,74,.12)}
+.pill.cn{color:var(--red);background:rgba(156,58,48,.1)}
+.pill.jp{color:var(--jade);background:rgba(45,93,85,.1)}
+
+/* ---------- compare ---------- */
+.cmp{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.cmp > div{background:var(--paper-2);border:1px solid var(--line);border-radius:4px;padding:26px 24px}
+.cmp h3{font-size:19px;margin:0 0 4px;letter-spacing:.1em}
+.cmp .en{font-family:var(--sans);font-size:10px;letter-spacing:.18em;color:var(--ink-3);margin-bottom:18px}
+.cmp dl{margin:0}
+.cmp dt{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;color:var(--gold);margin-top:16px}
+.cmp dd{margin:5px 0 0;font-size:14.4px;color:var(--ink-2);line-height:1.85}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:56px 0 70px;font-size:14px;color:var(--ink-2)}
+footer h4{font-size:14px;letter-spacing:.14em;margin:0 0 12px;font-family:var(--sans);color:var(--ink-3);font-weight:500}
+.src-grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:34px}
+footer ul{margin:0;padding-left:16px}
+footer li{margin-bottom:8px;line-height:1.8;font-size:13.4px}
+.foot-note{margin-top:38px;padding-top:22px;border-top:1px solid var(--line);font-family:var(--sans);font-size:11.5px;color:var(--ink-3);letter-spacing:.05em;line-height:1.9}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media (max-width:940px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .cards-3,.cards-2{grid-template-columns:1fr}
+  .cmp{grid-template-columns:1fr}
+  .src-grid{grid-template-columns:1fr;gap:26px}
+  .eight{grid-template-columns:repeat(2,1fr)}
+  .top-in{gap:12px}
+  .brand em{display:none}
+  nav.menu{
+    display:flex;overflow-x:auto;flex-wrap:nowrap;gap:0;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;max-width:62vw;
+  }
+  nav.menu::-webkit-scrollbar{display:none}
+  nav.menu a{padding:8px 9px;font-size:12px}
+  .sec-head .en{display:none}
+  .ev{grid-template-columns:78px 1fr;gap:16px}
+  .ev-y{font-size:10.5px;letter-spacing:0}
+  .verse-wrap{height:216px}
+  .verse-v{font-size:17px}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .wrap{padding:0 18px}
+  section.sec{padding:60px 0}
+  .pins{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
+  .acc .body{padding-left:6px}
+  .ev{grid-template-columns:70px 1fr;gap:12px}
+  .ev-b{padding-left:16px}
+  .hero-meta{gap:18px}
+  .hero-meta strong{font-size:20px}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#top">
+      <span class="seal">觀</span>
+      <span><b>中觀論</b><em>Mādhyamaka</em></span>
+    </a>
+    <nav class="menu">
+      <a href="#what">義理</a>
+      <a href="#timeline">年表</a>
+      <a href="#india">印度</a>
+      <a href="#china">中國</a>
+      <a href="#japan">日本</a>
+      <a href="#texts">經論</a>
+      <a href="#compare">比較</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker">A Survey of the Middle Way</p>
+      <h1 class="big"><span class="char">中</span><span class="char">觀</span><span class="char">論</span></h1>
+      <p class="sub">
+        從恆河到長安，再到奈良——<br>
+        一條關於<b>「空」</b>的思想線索，走了約一千八百年。
+      </p>
+      <p class="sub" style="font-size:15.5px;color:var(--ink-2);max-width:560px">
+        本頁以資料庫「中觀論」文件夾所收十二部典籍為底本，上溯印度論師的造論與註釋，
+        下及隋唐三論宗的判教與注疏，終至日本南都三論宗的承襲與變形。
+      </p>
+      <div class="hero-meta">
+        <div><strong>3</strong>印度 · 中國 · 日本</div>
+        <div><strong>12</strong>資料庫所藏典籍</div>
+        <div><strong>27</strong>《中論》品目</div>
+        <div><strong>456</strong>漢譯偈頌</div>
+      </div>
+    </div>
+    <aside class="verse-card">
+      <div class="v-title">觀四諦品 · 根本偈</div>
+      <div class="verse-wrap">
+        <div class="verse-v">
+          <span>眾因緣生法</span>
+          <span>我說即是無</span>
+          <span>亦為是假名</span>
+          <span>亦是中道義</span>
+        </div>
+      </div>
+      <div class="v-src">《中論》卷四 · 大正藏 T30 no. 1564</div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ 1 義理 ============ -->
+<section class="sec" id="what">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-no">一</span>
+      <h2>何謂中觀</h2>
+      <span class="en">The Middle Way</span>
+    </div>
+    <p class="lede rv">
+      中觀（Madhyamaka）並不是一套關於「空」的形上學，而是一種<strong>觀看的方式</strong>——如實觀緣起。
+      龍樹在《中論》開篇以「八不」總破一切戲論，又在〈觀四諦品〉用一偈把緣起、假名、中道三義收在一處：
+      這一偈後來被天台宗取作「空、假、中」三諦的經典依據，也成為漢傳佛教理解中觀的基本公式。
+    </p>
+
+    <div class="cards-3">
+      <div class="cc rv">
+        <div class="idx">01</div>
+        <h3>緣起性空</h3>
+        <div class="sk">Dependent Origination</div>
+        <p>
+          不是「什麼都沒有」，而是「沒有自性」。諸法依緣而起，故無獨立不變的自體；
+          正因為無自性，因果、生死、解脫才得以成立。
+          <q>以有空義故，一切法得成；若無空義者，一切則不成。</q>
+        </p>
+      </div>
+      <div class="cc rv">
+        <div class="idx">02</div>
+        <h3>八不中道</h3>
+        <div class="sk">The Eight Negations</div>
+        <p>
+          生滅、常斷、一異、來去——這四對範疇幾乎窮盡了眾生心識所能行的一切處。
+          一一否定，不是為了建立另一個「本體」，而是令心無所行、戲論自息。
+          故說「不」，而非說「無」。
+        </p>
+      </div>
+      <div class="cc rv">
+        <div class="idx">03</div>
+        <h3>二諦</h3>
+        <div class="sk">Two Truths</div>
+        <p>
+          世俗諦與第一義諦不是兩個世界，而是同一緣起法的兩種觀看。
+          離俗無真，廢真亦無俗。
+          <q>若不依俗諦，不得第一義；不得第一義，則不得涅槃。</q>
+        </p>
+      </div>
+    </div>
+
+    <div class="eight rv" style="margin-top:40px">
+      <div class="en-item">
+        <div class="pair">不生亦不滅</div>
+        <div class="br">所破：實有之生滅<br>（自性生、自性滅）</div>
+      </div>
+      <div class="en-item">
+        <div class="pair">不常亦不斷</div>
+        <div class="br">所破：因果相續之常斷<br>（常住不變 / 一滅永絕）</div>
+      </div>
+      <div class="en-item">
+        <div class="pair">不一亦不異</div>
+        <div class="br">所破：自性的同一與差異<br>（五陰與我、因果一異）</div>
+      </div>
+      <div class="en-item">
+        <div class="pair">不來亦不出</div>
+        <div class="br">所破：作者受者、因果內外<br>（從自在天來 / 從自性出）</div>
+      </div>
+    </div>
+
+    <p class="lede rv" style="margin-top:44px;margin-bottom:0">
+      方法論上，中觀有一個鮮明的性格：<strong>破而不立</strong>。它極少正面建立命題，而是指出論敵主張中的內在矛盾，
+      令其自行瓦解。這一點在印度演化為「應成」與「自續」的方法之爭，在中國則被吉藏提煉為一整套宗派方法論——「破邪顯正」。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 2 年表 ============ -->
+<section class="sec" id="timeline">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-no">二</span>
+      <h2>一千八百年 · 大事年表</h2>
+      <span class="en">Timeline</span>
+    </div>
+    <p class="lede rv">
+      同一套文本，在三個國家被讀出了不同的重心：印度關心<strong>論證是否成立</strong>，中國關心<strong>教相如何安頓</strong>，
+      日本關心<strong>宗義如何承襲</strong>。年表按國別著色，可篩選。
+    </p>
+    <div class="filters" id="tlFilter">
+      <button class="on" data-f="all">全部</button>
+      <button data-f="in">印度</button>
+      <button data-f="cn">中國</button>
+      <button data-f="jp">日本</button>
+      <button data-f="md">近代研究</button>
+    </div>
+
+    <div class="tl" id="tlList">
+      <article class="ev" data-c="in">
+        <div class="ev-y">約 2–3 世紀</div>
+        <div class="ev-b"><h4>龍樹造《中論》<span class="tag tag-in">印度</span></h4>
+        <p>生於南印度，約當中國東漢末至三國。造《中論》頌、〈迴諍論〉、〈七十空性論〉等，並相傳為《大智度論》所本。漢譯《中論》四卷二十七品，传统称「五百偈」。</p></div>
+      </article>
+      <article class="ev" data-c="in">
+        <div class="ev-y">約 3 世紀</div>
+        <div class="ev-b"><h4>提婆與《百論》<span class="tag tag-in">印度</span></h4>
+        <p>龍樹弟子聖天（Āryadeva）造《四百論》《百論》，以破斥外道與小乘部執為主，風格較龍樹更為峻烈，是中觀「破而不立」傳統的定型者。</p></div>
+      </article>
+      <article class="ev" data-c="in">
+        <div class="ev-y">約 4 世紀</div>
+        <div class="ev-b"><h4>青目作《中論》註<span class="tag tag-in">印度</span></h4>
+        <p>梵志青目（Piṅgala）為《中論》頌作長行釋，即鳩摩羅什漢譯所依之本。此釋文風樸質，後成為漢地研習《中論》的唯一完整古註。</p></div>
+      </article>
+      <article class="ev" data-c="cn">
+        <div class="ev-y">401</div>
+        <div class="ev-b"><h4>鳩摩羅什入長安<span class="tag tag-cn">中國</span></h4>
+        <p>後秦主姚興迎什公至長安，主逍遙園譯場。此後十餘年間，四論（《中論》《百論》《十二門論》《大智度論》）次第譯出，中觀學正式進入漢語世界。</p></div>
+      </article>
+      <article class="ev" data-c="cn">
+        <div class="ev-y">約 409</div>
+        <div class="ev-b"><h4>三論譯畢<span class="tag tag-cn">中國</span></h4>
+        <p>《中論》四卷、《百論》二卷、《十二門論》一卷先後譯出。僧叡作《中論序》，稱此論「坦夷路於沖階，敞玄門於宇內」。</p></div>
+      </article>
+      <article class="ev" data-c="cn">
+        <div class="ev-y">414</div>
+        <div class="ev-b"><h4>僧肇寂，四論傳世<span class="tag tag-cn">中國</span></h4>
+        <p>僧肇年三十一卒。所撰〈物不遷〉〈不真空〉〈般若無知〉〈涅槃無名〉四論，後合為《肇論》。羅什嘗歎「解空第一，肇公其人」。</p></div>
+      </article>
+      <article class="ev" data-c="in">
+        <div class="ev-y">約 5–6 世紀</div>
+        <div class="ev-b"><h4>佛護作《根本中論註》<span class="tag tag-in">印度</span></h4>
+        <p>佛護（Buddhapālita）純以歸謬法釋《中論》，只破不立，是為後世「應成」一系之遠祖。其書在印度一度湮沒，賴藏譯得存。</p></div>
+      </article>
+      <article class="ev" data-c="in">
+        <div class="ev-y">約 6 世紀</div>
+        <div class="ev-b"><h4>清辨與「中觀派」之名<span class="tag tag-in">印度</span></h4>
+        <p>清辨（Bhāviveka）造《般若燈論》《中觀心論》《掌珍論》，主張以因明立量正面表述空性，並與唯識師展開「空有之爭」。學界一般認為，他首次以「中觀派」自稱，大乘由此明確二分為中觀、瑜伽。</p></div>
+      </article>
+      <article class="ev" data-c="in">
+        <div class="ev-y">約 7 世紀</div>
+        <div class="ev-b"><h4>月稱與《入中論》<span class="tag tag-in">印度</span></h4>
+        <p>月稱（Candrakīrti）住那爛陀寺，作《明句論》《入中論》，擁佛護而駁清辨，中觀內部對立遂定。後世稱佛護—月稱一系為應成派（Prāsaṅgika），清辨一系為自續派（Svātantrika）。</p></div>
+      </article>
+      <article class="ev" data-c="cn">
+        <div class="ev-y">549–623</div>
+        <div class="ev-b"><h4>吉藏 · 三論宗的實際成立者<span class="tag tag-cn">中國</span></h4>
+        <p>吉藏生於金陵，七歲投興皇寺法朗。隋滅陳後北上，住會稽嘉祥寺，世稱「嘉祥大師」；後入長安慧日道場。講三論百餘遍，著《三論玄義》《大乘玄論》《二諦義》及三論之疏。</p></div>
+      </article>
+      <article class="ev" data-c="in">
+        <div class="ev-y">約 7–8 世紀</div>
+        <div class="ev-b"><h4>寂天與《入菩提行論》<span class="tag tag-in">印度</span></h4>
+        <p>寂天（Śāntideva）在那爛陀寺誦出《入菩提行論》，以「自他相換」把中觀空義轉為修行次第，是印度中觀由論辯走向實踐的關鍵。</p></div>
+      </article>
+      <article class="ev" data-c="jp">
+        <div class="ev-y">625</div>
+        <div class="ev-b"><h4>慧灌赴日 · 三論東傳<span class="tag tag-jp">日本</span></h4>
+        <p>高麗僧慧灌，吉藏門下，奉使至日本，住元興寺大弘三論。此為日本宗派佛教之始，後列「南都六宗」之一。慧灌被尊為日本三論宗初祖。</p></div>
+      </article>
+      <article class="ev" data-c="in">
+        <div class="ev-y">約 725–788</div>
+        <div class="ev-b"><h4>寂護入藏 · 瑜伽行中觀<span class="tag tag-in">印度</span></h4>
+        <p>寂護（Śāntarakṣita）於世俗諦引入唯識無境說，成「瑜伽行中觀派」，兩度入藏，建桑耶寺。其弟子蓮花戒約 792–794 年與漢僧摩訶衍論諍於桑耶，史稱「桑耶論諍」。</p></div>
+      </article>
+      <article class="ev" data-c="jp">
+        <div class="ev-y">701 / 718</div>
+        <div class="ev-b"><h4>道慈入唐與大安寺流<span class="tag tag-jp">日本</span></h4>
+        <p>道慈於大寶元年（701）入唐，從吉藏法孫元康學三論，兼習密教；養老二年（718）歸國，奉敕建大安寺，宣扬三论，是為日本三論宗第三傳。門下善議一系稱「大安寺流」，智光、禮光一系稱「元興寺流」。</p></div>
+      </article>
+      <article class="ev" data-c="jp">
+        <div class="ev-y">813</div>
+        <div class="ev-b"><h4>勤操紫宸殿宗論<span class="tag tag-jp">日本</span></h4>
+        <p>勤操於宮中紫宸殿論議中挫法相宗，為日本三論宗最盛期之標誌。同時期安澄著《中論疏記》，是日本中觀學最重要的本土注釋。</p></div>
+      </article>
+      <article class="ev" data-c="jp">
+        <div class="ev-y">905</div>
+        <div class="ev-b"><h4>聖寶建東大寺東南院<span class="tag tag-jp">日本</span></h4>
+        <p>聖寶於東大寺創東南院，作為弘揚三論的根據地。此後永觀、珍海等相繼而出，三論學在奈良、京都延續至鎌倉。</p></div>
+      </article>
+      <article class="ev" data-c="in">
+        <div class="ev-y">1042</div>
+        <div class="ev-b"><h4>阿底峽入藏 · 應成派西傳<span class="tag tag-in">印度</span></h4>
+        <p>阿底峽（Atiśa）師承應成一系的覺賢，入藏後形成噶當派。宗喀巴繼之，尊月稱應成見為中觀正統，格魯派遂以《明句論》為義理標準。</p></div>
+      </article>
+      <article class="ev" data-c="jp">
+        <div class="ev-y">13–14 世紀</div>
+        <div class="ev-b"><h4>凝然與「三論宗」之名<span class="tag tag-jp">日本</span></h4>
+        <p>東大寺凝然（1240–1321）撰《八宗綱要鈔》《三國佛法傳通緣起》，確立三論宗的祖統與宗名。值得注意的是：唐宋漢地文獻並無「三論宗」的自稱，此名實由日本學僧整理而成。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1903–1913</div>
+        <div class="ev-b"><h4>《明句論》梵本校訂<span class="tag tag-md">近代研究</span></h4>
+        <p>蒲桑（L. de La Vallée Poussin）校訂月稱《明句論》，中觀研究進入文獻學時代。梵本《中論》即以該書所收頌文為底本。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1985</div>
+        <div class="ev-b"><h4>《中論偈頌總覽》<span class="tag tag-md">近代研究</span></h4>
+        <p>三枝充悳彙編梵、漢三本、藏譯兩系《中論》偈頌並附日譯，成為今日研讀《中論》的標準對照工具書。日本學界（山口益、梶山雄一等）的中觀研究亦在此前後達到高峰。</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 印度 ============ -->
+<section class="sec" id="india">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-no">三</span>
+      <h2>印度：論證的技藝</h2>
+      <span class="en">India</span>
+    </div>
+    <p class="lede rv">
+      印度中觀史通常分三期：<strong>初期</strong>（龍樹、提婆，2–5 世紀）奠定義理；
+      <strong>中期</strong>（佛護、清辨、月稱、寂天，5–7 世紀）進入註釋與論諍，分裂為應成、自續；
+      <strong>後期</strong>（寂護、蓮花戒、師子賢，8–11 世紀）與唯識合流，稱瑜伽行中觀，並隨密教興起而漸次消融。
+    </p>
+
+    <div class="pgrid">
+      <div class="person rv"><div class="nm">龍樹<span class="rom">Nāgārjuna</span></div><div class="dt">約 2–3 世紀 · 南印度</div>
+        <p>中觀奠基者。以《般若經》為本，造《中論》頌破一切自性見，確立「緣起—無自性—空—假名—中道」的義理鏈條。</p>
+        <div class="work">《中論》《迴諍論》《七十空性論》《六十頌如理論》</div></div>
+
+      <div class="person rv"><div class="nm">提婆<span class="rom">Āryadeva</span></div><div class="dt">約 3 世紀</div>
+        <p>龍樹弟子，以「破而不立」的峻烈風格著稱，主破外道與小乘部執，把中觀從義理轉為論辯實踐。</p>
+        <div class="work">《四百論》《百論》（漢譯 T30 no. 1569）</div></div>
+
+      <div class="person rv"><div class="nm">羅睺羅跋陀羅<span class="rom">Rāhulabhadra</span></div><div class="dt">約 3–4 世紀</div>
+        <p>龍樹再傳，漢藏所傳法脈多經其手。其後約二百年間傳承記載模糊，是中觀史上的一段空白。</p>
+        <div class="work">《讚般若波羅蜜多頌》等</div></div>
+
+      <div class="person rv"><div class="nm">青目<span class="rom">Piṅgala</span></div><div class="dt">約 4 世紀</div>
+        <p>梵志，為《中論》頌作長行釋。羅什漢譯即以此為本，因此漢地讀到的《中論》始終帶著青目的解讀框架。</p>
+        <div class="work">《中論》釋（今存於漢譯本）</div></div>
+
+      <div class="person rv"><div class="nm">佛護<span class="rom">Buddhapālita</span></div><div class="dt">約 470–550</div>
+        <p>純用歸謬（prasaṅga）釋《中論》，只破敵論、不自立量。後為月稱推尊，成為應成派的實際源頭。</p>
+        <div class="work">《根本中論註》（存藏譯）</div></div>
+
+      <div class="person rv"><div class="nm">清辨<span class="rom">Bhāviveka</span></div><div class="dt">約 490–570</div>
+        <p>主張以因明比量正面證成空性，並批判佛護「破而不立」之不足；同時與唯識師論戰。一般認為他首先使用「中觀派」一詞作為自我標識。</p>
+        <div class="work">《般若燈論》（漢譯 T30 no. 1566）《中觀心論》《掌珍論》</div></div>
+
+      <div class="person rv"><div class="nm">月稱<span class="rom">Candrakīrti</span></div><div class="dt">約 600–650</div>
+        <p>那爛陀寺住持。擁佛護、駁清辨，以「唯破不立、隨應而破」確立應成派規模，被藏傳格魯派尊為中觀正統。</p>
+        <div class="work">《明句論》《入中論》</div></div>
+
+      <div class="person rv"><div class="nm">寂天<span class="rom">Śāntideva</span></div><div class="dt">約 685–763</div>
+        <p>以《入菩提行論》把空義轉為菩薩行的修行次第，「自他相換」成為藏傳菩提心教授的骨干。</p>
+        <div class="work">《入菩提行論》《集菩薩學論》</div></div>
+
+      <div class="person rv"><div class="nm">寂護<span class="rom">Śāntarakṣita</span></div><div class="dt">約 725–788</div>
+        <p>後期中觀代表。於世俗諦攝入唯識無境，成「瑜伽行中觀」；兩度入藏，建桑耶寺，奠定藏地顯教基礎。</p>
+        <div class="work">《中觀莊嚴論》《攝真實論》</div></div>
+
+      <div class="person rv"><div class="nm">蓮花戒<span class="rom">Kamalaśīla</span></div><div class="dt">約 740–795</div>
+        <p>寂護弟子。約 792–794 年於桑耶寺與漢僧摩訶衍論「頓漸」，勝後中觀漸修次第成為藏地主流。</p>
+        <div class="work">《修習次第》《攝真實論細疏》</div></div>
+    </div>
+
+    <div style="margin-top:44px" class="rv">
+      <h3 style="font-size:17px;letter-spacing:.1em;margin:0 0 18px">法脈大勢</h3>
+      <div class="flow">
+        <div class="node"><b>龍樹</b><small>2–3 世紀</small></div>
+        <div class="node"><b>提婆</b><small>百論</small></div>
+        <div class="node"><b>羅睺羅</b><small>傳承不明期</small></div>
+        <div class="node"><b>佛護</b><small>歸謬 · 應成</small></div>
+        <div class="node"><b>月稱</b><small>明句論</small></div>
+        <div class="node"><b>阿底峽</b><small>1042 入藏</small></div>
+      </div>
+      <div class="flow" style="margin-top:10px">
+        <div class="node"><b>青目</b><small>中論釋</small></div>
+        <div class="node"><b>鳩摩羅什</b><small>401 長安</small></div>
+        <div class="node"><b>漢地三論學</b><small>→ 中國</small></div>
+        <div class="node"><b>清辨</b><small>因明 · 自續</small></div>
+        <div class="node"><b>寂護</b><small>瑜伽行中觀</small></div>
+        <div class="node"><b>蓮花戒</b><small>桑耶論諍</small></div>
+      </div>
+      <p class="flow-note">上圖非嚴格師承，而是思想流向的示意：同一源頭分出兩條方法路線，又各循漢、藏兩路傳播。</p>
+    </div>
+
+    <div style="margin-top:44px" class="rv">
+      <h3 style="font-size:17px;letter-spacing:.1em;margin:0 0 16px">「空有之爭」與兩派分裂</h3>
+      <p style="font-size:15.4px;color:var(--ink-2);line-height:2;max-width:830px;margin:0">
+        六世紀以後，中觀與唯識就「依他起性是否有自性」「空是否可正面表述」展開長期論諍。清辨與安慧、護法的對辯是其中主線；
+        玄奘留印時曾作《會宗論》三千頌調和雙方，此論今已不存。而中觀內部的分裂，說到底不是義理目標之別，而是<strong>論證方法</strong>之別：
+        應成派認為中觀只能破、不能立，一旦自立比量，便等於承認了自性；自續派則認為若不立量，空性無從令人信解。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 中國 ============ -->
+<section class="sec" id="china">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-no">四</span>
+      <h2>中國：從譯場到宗派</h2>
+      <span class="en">China</span>
+    </div>
+    <p class="lede rv">
+      中觀在中國走了一條與印度很不同的路。印度論師關心「這個論證能否成立」，中國論師更關心「這部經論在整個佛教中處於什麼位置」。
+      於是，同樣的《中論》，在漢地長出了判教體系、注疏傳統，與一個名為「三論」的宗派。
+    </p>
+
+    <!-- 4.1 -->
+    <h3 class="rv" style="font-size:22px;letter-spacing:.08em;margin:0 0 8px">4.1　羅什譯場：中觀的漢語化</h3>
+    <p class="rv" style="font-size:15.4px;color:var(--ink-2);line-height:2;max-width:830px;margin:0 0 24px">
+      401 年，鳩摩羅什（344–413）被迎至長安。此後十餘年，長安成為當時東亞最大的譯經中心。
+      羅什的譯筆不以直譯為尚，而重「達旨」——刪繁就簡、以漢語的節奏重構偈頌。這使《中論》在漢地不只是被讀懂，而且被<strong>讀得好聽</strong>：
+      「不生亦不滅，不常亦不斷，不一亦不異，不來亦不出」，四對否定排比而下，本身就具有咒語般的力量。
+    </p>
+
+    <div class="tablewrap rv" style="margin-bottom:22px">
+      <table>
+        <thead><tr><th>譯典</th><th>大正藏</th><th>卷數</th><th>作者 / 譯者</th><th>在漢地的角色</th></tr></thead>
+        <tbody>
+          <tr><td class="tt">《中論》</td><td class="id">T30 no. 1564</td><td>4</td><td>龍樹造 · 青目釋 · 鳩摩羅什譯</td><td>三論之一，三論宗的根本論</td></tr>
+          <tr><td class="tt">《百論》</td><td class="id">T30 no. 1569</td><td>2</td><td>提婆造 · 婆藪開士釋 · 鳩摩羅什譯</td><td>三論之一，主破外道</td></tr>
+          <tr><td class="tt">《十二門論》</td><td class="id">T30 no. 1568</td><td>1</td><td>龍樹造 · 鳩摩羅什譯</td><td>三論之一，入中觀之略門</td></tr>
+          <tr><td class="tt">《大智度論》</td><td class="id">T25 no. 1509</td><td>100</td><td>龍樹造 · 鳩摩羅什譯</td><td>《大品般若》釋論，三論宗的義理背景</td></tr>
+          <tr><td class="tt">《肇論》</td><td class="id">T45 no. 1858</td><td>1</td><td>僧肇撰</td><td>漢地最早系統吸收中觀理路的著作</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 4.2 -->
+    <h3 class="rv" style="font-size:22px;letter-spacing:.08em;margin:46px 0 8px">4.2　僧肇：以老莊語彙說中觀</h3>
+    <p class="rv" style="font-size:15.4px;color:var(--ink-2);line-height:2;max-width:830px;margin:0 0 24px">
+      僧肇（384–414）是羅什門下最鋒利的一支筆。《肇論》四篇，篇篇都在處理同一個問題：<strong>真與俗如何不相礙</strong>。
+      〈不真空論〉說「不真故空」——萬物非真實存在，所以是空；但並非一無所有，所以不壞世俗。
+      這一句把中觀的「空」從否定命題，翻譯成了中國思想能夠接受的存有論表述。
+    </p>
+
+    <div class="cards-2 rv">
+      <div class="cc"><div class="idx">物不遷論</div><h3 style="font-size:18px">動靜不二</h3>
+        <p>以「昔物不至今」證各物住於自位，看似主靜，實則破「有一常住之流」的實體遷動見。</p></div>
+      <div class="cc"><div class="idx">不真空論</div><h3 style="font-size:18px">不真故空</h3>
+        <p>「非無物也，物非真物。」空不在物外，即物而空；此為漢傳中觀最凝練的一句命題。</p></div>
+      <div class="cc"><div class="idx">般若無知論</div><h3 style="font-size:18px">聖心無知</h3>
+        <p>般若以「無知」為知——不取相、不分別，故能遍照。回應了當時「聖人是否有知」的爭論。</p></div>
+      <div class="cc"><div class="idx">涅槃無名論</div><h3 style="font-size:18px">涅槃絕名</h3>
+        <p>涅槃非有非無、不可以名得。此論上秦主姚興，以「無名」立宗，影響及於後世禪門。</p></div>
+    </div>
+
+    <!-- 4.3 -->
+    <h3 class="rv" style="font-size:22px;letter-spacing:.08em;margin:52px 0 8px">4.3　攝山至嘉祥：三論宗的成立</h3>
+    <p class="rv" style="font-size:15.4px;color:var(--ink-2);line-height:2;max-width:830px;margin:0 0 24px">
+      羅什之後，三論之學在南方以「攝山」為中心傳承。攝山僧朗以《中論》《百論》《十二門論》破《成實論》的舊解，
+      經僧詮、法朗而至吉藏，三代相承，到吉藏手上才真正具備宗派的規模。
+    </p>
+
+    <div class="flow cv rv">
+      <div class="node"><b>僧朗</b><small>攝山棲霞寺 · 齊梁</small></div>
+      <div class="node"><b>僧詮</b><small>止觀寺</small></div>
+      <div class="node"><b>法朗</b><small>興皇寺 · 507–581</small></div>
+      <div class="node"><b>吉藏</b><small>嘉祥寺 · 549–623</small></div>
+      <div class="node"><b>慧灌</b><small>高麗 · 625 赴日</small></div>
+    </div>
+    <p class="flow-note rv">攝山一系以「破邪顯正」為方法，以《成實論》為主要破斥對象。吉藏晚年入長安，三論學一度成為官學；其弟子慧灌則把法脈帶到了日本。</p>
+
+    <!-- 4.4 -->
+    <h3 class="rv" style="font-size:22px;letter-spacing:.08em;margin:52px 0 18px">4.4　吉藏的四件工具</h3>
+    <div class="acc rv">
+      <details open>
+        <summary><span class="no">01</span>破邪顯正<span class="plus">＋</span></summary>
+        <div class="body">
+          <p>《三論玄義》開篇即定調：「論雖有三，義唯二轍：一曰顯正，二曰破邪。」三論不是三套學說，而是兩種動作：破掉邪執，正理自顯。</p>
+          <p>所破者，吉藏舉其大略為四宗：<strong>一摧外道、二折毗曇、三排成實、四呵大執</strong>。前三者是印度與部派的老對手，第四「呵大執」則是他最具批判性的一刀——連自認為學大乘而有「所得心」的人，也在破斥之列。</p>
+          <p class="mini">這一立場使三論宗在唐代諸宗中顯得格外孤峻：它幾乎不建立自己的正面教義，因此也最難被當作一個「宗」來安頓。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="no">02</span>二藏判教 · 破五時<span class="plus">＋</span></summary>
+        <div class="body">
+          <p>當時南方盛行慧觀的「五時判教」：三乘別教、三乘通教、抑揚教、同歸教、常住教。吉藏反對這種分法，主張如來一代教法只有<strong>二藏</strong>：聲聞藏與菩薩藏。</p>
+          <p>他的理由很簡單：經論只說「佛法有二」——《智度論》說一者三藏、二者大乘藏；《地持論》說十一部經名聲聞藏、方等大乘名菩薩藏。既有明文，何必再立五時？</p>
+          <p class="mini">判教在這裡不只是分類學，而是一場詮釋權的爭奪：誰有權決定佛說的分期，誰就掌握了整個佛教的解釋框架。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="no">03</span>三輪<span class="plus">＋</span></summary>
+        <div class="body">
+          <p>在《中觀論疏》中，吉藏以「三輪」架構安頓《中論》全書，也安頓佛的一代教化：</p>
+          <p><strong>根本法輪</strong>（一乘教，即《華嚴》）→ <strong>枝末法輪</strong>（於一佛乘分別說三）→ <strong>攝末歸本</strong>（會三歸一，即《法華》）。</p>
+          <p>《中論》二十七品正對應這三輪：前二十五品申根本之教，次二品（〈觀十二因緣品〉〈觀邪見品〉）申枝末之教，末偈推功歸佛，即是攝末歸本。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="no">04</span>四重二諦<span class="plus">＋</span></summary>
+        <div class="body">
+          <p>《大乘玄論》以四重層層轉深的結構處理二諦，每一重都把前一重降為「俗」：</p>
+          <p><strong>第一重</strong>：有為世諦，空為真諦（對毗曇事理二諦）。<br>
+             <strong>第二重</strong>：有空皆為世諦，非空非有為真諦（對成實師）。<br>
+             <strong>第三重</strong>：二與不二皆為世諦，非二非不二為真諦（對大乘師）。<br>
+             <strong>第四重</strong>：前三重皆是教門，說此三門為令悟「不三」，無所依得，始名為理；「言忘慮絕方是真諦」。</p>
+          <p class="mini">四重不是四個真理，而是四層藥：病去藥亡，最後連「二諦」這個框架本身也要放下。這是中觀「破而不立」在中國最精緻的一次展開。</p>
+        </div>
+      </details>
+    </div>
+
+    <!-- 4.5 27品 -->
+    <h3 class="rv" style="font-size:22px;letter-spacing:.08em;margin:52px 0 8px">4.5　《中論》二十七品的結構</h3>
+    <p class="rv" style="font-size:15.4px;color:var(--ink-2);line-height:2;max-width:830px;margin:0 0 26px">
+      漢譯《中論》四卷二十七品。依吉藏《中觀論疏》的三分：前二十五品破大乘迷執、明大乘觀行；
+      次二品破小乘迷執、辨小乘觀行；末偈推功歸佛。下列品目與偈數，依大正藏品題自標，合計 456 偈
+      （吉藏審核作 446 偈，古來通稱「五百偈」）。
+    </p>
+
+    <div class="pin-group rv">
+      <div class="pin-h">大乘觀行 <span>第 1–25 品 · 破大乘迷執</span></div>
+      <div class="pins" id="pinsA"></div>
+    </div>
+    <div class="pin-group rv">
+      <div class="pin-h">小乘觀行 <span>第 26–27 品 · 破小乘迷執</span></div>
+      <div class="pins" id="pinsB"></div>
+    </div>
+
+    <blockquote class="q rv" style="margin-top:36px">
+      諸法不可得，滅一切戲論，無人亦無處，佛亦無所說。
+      <cite>《中論》卷四 · 觀涅槃品</cite>
+    </blockquote>
+
+    <!-- 4.6 -->
+    <h3 class="rv" style="font-size:22px;letter-spacing:.08em;margin:52px 0 8px">4.6　影響與衰微</h3>
+    <p class="rv" style="font-size:15.4px;color:var(--ink-2);line-height:2;max-width:830px;margin:0 0 20px">
+      三論宗作為宗派在唐中葉以後衰落，但它作為「方法」從未消失，而是被拆散、吸收進了其他宗派：
+    </p>
+    <div class="cards-3 rv">
+      <div class="cc"><h3 style="font-size:17px">天台</h3>
+        <p>智顗取〈觀四諦品〉三是偈立「空、假、中」三諦與一心三觀。中觀的二諦，在天台被擴展為三諦圓融。</p></div>
+      <div class="cc"><h3 style="font-size:17px">華嚴</h3>
+        <p>法藏撰《十二門論宗致義記》，以華嚴立場判攝三論；澄觀、宗密亦兼採中觀遮詮。宋以後三論典籍多賴華嚴、天台的注家保存。</p></div>
+      <div class="cc"><h3 style="font-size:17px">禪宗</h3>
+        <p>四祖道信居廬山大林寺十年，該寺正是三論師智鍇隱居之處；達摩一系由《楞伽》轉重《般若》，其間不無三論學的影響。</p></div>
+    </div>
+    <p class="rv" style="font-size:15.4px;color:var(--ink-2);line-height:2;max-width:830px;margin:24px 0 0">
+      衰落的原因，一半在外、一半在內。在外，是唐初三論與唯識、天台、華嚴的競爭中缺乏制度依托——
+      它沒有獨立的山門與穩定的僧團經濟；在內，則是它的性格使然：一個以「破」為方法的宗派，
+      很難把自己建設成一個可供人依止的「宗」。到了近代，金陵刻經處與支那內學院重刊三論疏釋，中觀學才再度回到漢地學術視野。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 5 日本 ============ -->
+<section class="sec" id="japan">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-no">五</span>
+      <h2>日本：南都六宗中的三論</h2>
+      <span class="en">Japan</span>
+    </div>
+    <p class="lede rv">
+      日本三論宗直接承自吉藏，是漢傳佛教最早傳入日本並形成宗派的學派之一，與法相、俱舍、成實、華嚴、律並列為「南都六宗」。
+      它的歷史只有「三傳」，此後便分派、滲透，終至融攝於其他宗派。
+    </p>
+
+    <div class="flow jv rv">
+      <div class="node"><b>慧灌</b><small>初祖 · 625 元興寺</small></div>
+      <div class="node"><b>福亮</b><small>慧灌高足</small></div>
+      <div class="node"><b>智藏</b><small>二祖 · 法隆寺</small></div>
+      <div class="node"><b>道慈</b><small>三祖 · 718 大安寺</small></div>
+      <div class="node"><b>善議</b><small>大安寺流</small></div>
+      <div class="node"><b>安澄</b><small>中論疏記</small></div>
+    </div>
+    <p class="flow-note rv">智藏門下另有智光、禮光，住元興寺，稱「元興寺流」，與善議的「大安寺流」並立。日本三論宗自此分派，此後再無直系單傳。</p>
+
+    <div class="pgrid rv" style="margin-top:34px">
+      <div class="person"><div class="nm">慧灌</div><div class="dt">日本三論宗初祖 · 625 赴日</div>
+        <p>高麗僧，入隋唐從吉藏學三論。推古天皇三十三年（625）奉使至日本，住元興寺大弘三論，被視為日本宗派佛教之始。</p>
+        <div class="work">以《三論玄義》為教學綱領</div></div>
+
+      <div class="person"><div class="nm">智藏</div><div class="dt">第二傳</div>
+        <p>福亮之子，亦為其弟子。天智年間入唐，親從吉藏受學，返日後住法隆寺宣講三論，日本三論學由此確立規模。</p>
+        <div class="work">法隆寺 · 三論講學</div></div>
+
+      <div class="person"><div class="nm">道慈</div><div class="dt">？–744 · 第三傳</div>
+        <p>大寶元年（701）入唐，從吉藏法孫元康學三論，兼就善無畏習密教。養老二年（718）歸國，奉敕建大安寺，為大安寺流初祖。</p>
+        <div class="work">大安寺 · 兼傳密教</div></div>
+
+      <div class="person"><div class="nm">安澄</div><div class="dt">大安寺流 · 9 世紀</div>
+        <p>善議弟子，精通三論與密教。所撰《中論疏記》博引漢地諸家舊說，是日本中觀學最重要的一部本土注釋，今存於大正藏。</p>
+        <div class="work">《中論疏記》（大正藏第 65 冊）</div></div>
+
+      <div class="person"><div class="nm">勤操</div><div class="dt">813 紫宸殿宗論</div>
+        <p>安澄同門，以三論義於宮中論議挫法相宗，是日本三論宗聲勢最盛時的代表人物。</p>
+        <div class="work">宗論 · 三論對法相</div></div>
+
+      <div class="person"><div class="nm">玄叡<span style="font-size:11px;color:var(--ink-3)">（玄睿）</span></div><div class="dt">安澄弟子 · 西大寺</div>
+        <p>撰《三論大義鈔》，以日本學僧的問題意識重新整理三論宗義，是了解日本三論學理解方式的第一手材料。</p>
+        <div class="work">《三論大義鈔》四卷</div></div>
+
+      <div class="person"><div class="nm">聖寶</div><div class="dt">905 東大寺東南院</div>
+        <p>於東大寺創東南院，作為弘揚三論的基地。此後永觀、珍海等相繼而出，三論學在奈良、京都延續至鎌倉。</p>
+        <div class="work">東大寺東南院</div></div>
+
+      <div class="person"><div class="nm">凝然</div><div class="dt">1240–1321</div>
+        <p>東大寺學僧。撰《八宗綱要鈔》《三國佛法傳通緣起》，確立三論宗的宗名與祖統——今日我們所知的「三論宗譜系」，很大程度出自他的手筆。</p>
+        <div class="work">《八宗綱要鈔》《三國佛法傳通緣起》</div></div>
+    </div>
+
+    <div style="margin-top:46px" class="rv">
+      <h3 style="font-size:19px;letter-spacing:.08em;margin:0 0 18px">三點值得注意</h3>
+      <div class="acc">
+        <details>
+          <summary><span class="no">一</span>「三論宗」這個名字，是日本人定的<span class="plus">＋</span></summary>
+          <div class="body">
+            <p>唐宋漢地文獻在談佛教宗派時，並未以「三論宗」自稱；「三論」多指所學的論書，學三論者也常兼講《法華》《大品》《維摩》。
+              宗名與祖統的正式確立，見於日僧凝然的《八宗綱要鈔》與《三國佛法傳通緣起》。</p>
+            <p class="mini">因此閱讀三論宗的歷史時需要一點警覺：我們今天看到的整齊譜系，有一部分是後世（而且是在日本）建構出來的。</p>
+          </div>
+        </details>
+        <details>
+          <summary><span class="no">二</span>成實、俱舍被併入三論講席<span class="plus">＋</span></summary>
+          <div class="body">
+            <p>日本三論宗在教學上把《成實論》與《俱舍論》一併納入講授，形成「三論兼成實」的格局，成實學派因此未能獨立成宗，被稱為三論宗的附宗。</p>
+            <p>這與吉藏以《成實論》為主要破斥對象的立場，其實已有相當距離。</p>
+          </div>
+        </details>
+        <details>
+          <summary><span class="no">三</span>從「無所得」到「有相中道」<span class="plus">＋</span></summary>
+          <div class="body">
+            <p>近人歸納日本三論宗衰微之因，常舉三點：以成實、俱舍混講而改變三論本有性格；以三論破斥他宗，違背吉藏「一切經論一味平等」的立場；
+              以及把「離言絕相」的無所得正觀，講成了可以名相建立的有相中道。</p>
+            <p class="mini">此說出自近現代研究者的整理，非日本古師自陳，宜作參考而非定論。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="rv" style="margin-top:42px">
+      <h3 style="font-size:19px;letter-spacing:.08em;margin:0 0 14px">近代：文獻學的中觀</h3>
+      <p style="font-size:15.4px;color:var(--ink-2);line-height:2;max-width:840px;margin:0">
+        明治以後，日本學界以梵、漢、藏對勘的方法重構中觀史。山口益、梶山雄一（《空の論理》，中譯《佛教中觀哲學》）、
+        三枝充悳（《中論偈頌總覽》，1985）等人的工作，使《中論》從「宗派典籍」變成了「可校勘、可比對的文本」。
+        今日我們能同時看到梵本頌文、漢譯三本與藏譯兩系，很大程度上要歸功於這一脈研究。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 經論 ============ -->
+<section class="sec" id="texts">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-no">六</span>
+      <h2>經論目錄</h2>
+      <span class="en">Texts</span>
+    </div>
+    <p class="lede rv">
+      下表前十二部為資料庫「中觀論」文件夾所藏，其後為漢譯中觀文獻的重要補充（依 CBETA 大正藏）。
+      可按國別篩選；「藏」一欄標示是否為本項目所收。
+    </p>
+    <div class="filters" id="txFilter">
+      <button class="on" data-f="all">全部</button>
+      <button data-f="in">印度</button>
+      <button data-f="cn">中國</button>
+    </div>
+    <div class="tablewrap rv">
+      <table id="txTable">
+        <thead><tr><th>書名</th><th>大正藏</th><th>卷</th><th>作者 / 譯者</th><th>性質</th><th>藏</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="flow-note rv" style="margin-top:14px">
+      卷數依大正藏經錄。「性質」為編者所加，便於檢索，非傳統分類。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 7 比較 ============ -->
+<section class="sec" id="compare">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-no">七</span>
+      <h2>三國之異同</h2>
+      <span class="en">Comparison</span>
+    </div>
+    <p class="lede rv">
+      同一個「空」，在三地承擔了不同的功能。這張表不是要分出高下，而是標出各自的問題意識。
+    </p>
+    <div class="cmp">
+      <div class="rv">
+        <h3>印度</h3>
+        <div class="en">INDIA · 2–11 C.</div>
+        <dl>
+          <dt>核心關切</dt><dd>論證是否成立、空性可否正面表述</dd>
+          <dt>主要文體</dt><dd>頌 + 註釋；因明論式</dd>
+          <dt>內部張力</dt><dd>應成 / 自續；中觀 / 瑜伽</dd>
+          <dt>代表人物</dt><dd>龍樹、提婆、佛護、清辨、月稱、寂天</dd>
+          <dt>終局</dt><dd>隨密教興起而消融，應成見經阿底峽入藏而大盛</dd>
+        </dl>
+      </div>
+      <div class="rv">
+        <h3>中國</h3>
+        <div class="en">CHINA · 5–13 C.</div>
+        <dl>
+          <dt>核心關切</dt><dd>教相如何安頓、經論如何會通</dd>
+          <dt>主要文體</dt><dd>疏、玄義、章門；判教表</dd>
+          <dt>內部張力</dt><dd>三論 / 成實；三論 / 天台、唯識</dd>
+          <dt>代表人物</dt><dd>鳩摩羅什、僧肇、僧朗、法朗、吉藏</dd>
+          <dt>終局</dt><dd>宗派衰微，方法被天台、華嚴、禪吸收</dd>
+        </dl>
+      </div>
+      <div class="rv">
+        <h3>日本</h3>
+        <div class="en">JAPAN · 7–14 C.</div>
+        <dl>
+          <dt>核心關切</dt><dd>宗義如何承襲、如何在宗論中自處</dd>
+          <dt>主要文體</dt><dd>疏記、大義鈔、宗論</dd>
+          <dt>內部張力</dt><dd>元興寺流 / 大安寺流；三論 / 法相</dd>
+          <dt>代表人物</dt><dd>慧灌、智藏、道慈、安澄、勤操、凝然</dd>
+          <dt>終局</dt><dd>鎌倉中葉後融攝於華嚴、天台、禪、淨土</dd>
+        </dl>
+      </div>
+    </div>
+
+    <blockquote class="q rv" style="margin-top:40px">
+      考聖心，以息患為主；統教意，以通理為宗。……論雖有三，義唯二轍：一曰顯正，二曰破邪。
+      <cite>吉藏《三論玄義》卷首 · 大正藏 T45 no. 1852</cite>
+    </blockquote>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="src-grid">
+      <div>
+        <h4>底本</h4>
+        <ul>
+          <li>資料庫「中觀論」文件夾，共 12 部：《中論》《順中論》《般若燈論釋》《百論》《大智度論》《中觀論疏》《百論疏》《十二門論疏》《大乘玄論》《肇論》《肇論疏》《肇論新疏》</li>
+          <li>引文依大正藏原文（多為繁體），標註冊號與經號</li>
+        </ul>
+      </div>
+      <div>
+        <h4>參校</h4>
+        <ul>
+          <li>CBETA 電子佛典（大正藏 T25 / T30 / T42 / T45）</li>
+          <li>《三論玄義》《二諦義》《大乘玄論》《中觀論疏》原文檢核</li>
+          <li>日本三論宗史料：《三國佛法傳通緣起》《本朝高僧傳》《三論祖師傳集》、凝然《八宗綱要鈔》</li>
+        </ul>
+      </div>
+      <div>
+        <h4>說明</h4>
+        <ul>
+          <li>人物生卒年多為學界推定，以「約」標示</li>
+          <li>《中論》偈數依漢譯品題自標合計 456 偈；吉藏審核作 446 偈，古來通稱五百偈</li>
+          <li>「三論宗」宗名與祖統主要由日本學僧整理，唐宋漢地並無此自稱</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-note">
+      中觀論 · 三國總覽　|　以資料庫所藏為底本編纂　|　義理表述力求貼近原典，人物與年代取通行之說，異說處已隨文註明
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------- progress + scrollspy ---------- */
+const bar = document.getElementById('bar');
+const links = [...document.querySelectorAll('nav.menu a')];
+const secs = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+function onScroll(){
+  const h = document.documentElement;
+  const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+  bar.style.width = (p*100).toFixed(2) + '%';
+  let cur = null;
+  secs.forEach(s => { if (s.getBoundingClientRect().top <= 140) cur = s.id; });
+  links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#'+cur));
+}
+document.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+/* ---------- reveal ---------- */
+const io = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {rootMargin:'0px 0px -8% 0px', threshold:0.06});
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+/* ---------- timeline filter ---------- */
+const tlFilter = document.getElementById('tlFilter');
+tlFilter.addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  [...tlFilter.children].forEach(x => x.classList.toggle('on', x===b));
+  const f = b.dataset.f;
+  document.querySelectorAll('#tlList .ev').forEach(ev => {
+    ev.style.display = (f==='all' || ev.dataset.c===f) ? '' : 'none';
+  });
+});
+
+/* ---------- 27 pins ---------- */
+const pinsA = [
+  ['觀因緣',16],['觀去來',25],['觀六情',8],['觀五陰',9],['觀六種',8],
+  ['觀染染者',10],['觀三相',35],['觀作作者',12],['觀本住',12],['觀燃可燃',16],
+  ['觀本際',8],['觀苦',10],['觀行',9],['觀合',8],['觀有無',11],
+  ['觀縛解',10],['觀業',33],['觀法',12],['觀時',6],['觀因果',24],
+  ['觀成壞',20],['觀如來',26],['觀顛倒',24],['觀四諦',40],['觀涅槃',24]
+];
+const pinsB = [['觀十二因緣',9],['觀邪見',31]];
+
+function renderPins(el, arr, offset){
+  el.innerHTML = arr.map(([name,v],i)=>{
+    const n = String(i+1+offset).padStart(2,'0');
+    const kind = offset ? ' pin small' : ' pin';
+    const h = Math.round(v/40*100);
+    return '<div class="pin'+(offset?' small':'')+'"><div class="n">'+n+'</div><div class="t">'+name+'</div>'
+         + '<div class="v">'+v+' 偈</div><i style="--h:'+h+'"></i></div>';
+  }).join('');
+}
+renderPins(document.getElementById('pinsA'), pinsA, 0);
+renderPins(document.getElementById('pinsB'), pinsB, 25);
+
+/* ---------- text table ---------- */
+const TEXTS = [
+  ['中論','T30 no. 1564','4','龍樹造 · 青目釋 · 鳩摩羅什譯','根本論頌 · 27品','in',1],
+  ['順中論','T30 no. 1565','2','龍樹造 · 無著釋 · 瞿曇般若流支譯','註釋（唯識立場）','in',1],
+  ['般若燈論釋','T30 no. 1566','15','龍樹偈本 · 清辨釋 · 波羅頗蜜多羅譯','註釋（自續系）','in',1],
+  ['百論','T30 no. 1569','2','提婆造 · 婆藪開士釋 · 鳩摩羅什譯','根本論 · 破外道','in',1],
+  ['大智度論','T25 no. 1509','100','龍樹造 · 鳩摩羅什譯','釋經論（大品般若）','in',1],
+  ['中觀論疏','T42 no. 1824','20','隋 吉藏撰','注疏 · 三論宗核心','cn',1],
+  ['百論疏','T42 no. 1827','9','隋 吉藏撰','注疏','cn',1],
+  ['十二門論疏','T42 no. 1825','6','隋 吉藏撰','注疏','cn',1],
+  ['大乘玄論','T45 no. 1853','5','隋 吉藏撰','宗義 · 四重二諦','cn',1],
+  ['肇論','T45 no. 1858','1','後秦 僧肇撰','漢地本土論書 · 四論','cn',1],
+  ['肇論疏','T45 no. 1859','3','唐 元康撰','注疏','cn',1],
+  ['肇論新疏','T45 no. 1860','3','元 文才述','注疏','cn',1],
+  ['十二門論','T30 no. 1568','1','龍樹造 · 鳩摩羅什譯','根本論 · 十二門','in',0],
+  ['廣百論本','T30 no. 1570','1','聖天造 · 玄奘譯','根本論 · 提婆系','in',0],
+  ['大乘廣百論釋論','T30 no. 1571','10','聖天本 · 護法釋 · 玄奘譯','註釋（唯識立場）','in',0],
+  ['百字論','T30 no. 1572','1','提婆造 · 菩提流支譯','根本論 · 略本','in',0],
+  ['大乘掌珍論','T30 no. 1578','2','清辨造 · 玄奘譯','論義 · 空有之爭','in',0],
+  ['六十頌如理論','T30 no. 1575','1','龍樹造 · 施護譯','根本論 · 略本','in',0],
+  ['大乘破有論','T30 no. 1574','1','龍樹造 · 施護譯','根本論 · 略本','in',0],
+  ['大乘二十頌論','T30 no. 1576','1','龍樹造 · 施護譯','根本論 · 略本','in',0],
+  ['壹輸盧迦論','T30 no. 1573','1','龍樹造 · 瞿曇般若流支譯','根本論 · 略本','in',0],
+  ['十八空論','T31 no. 1616','1','龍樹造 · 真諦譯','論義 · 十八空','in',0],
+  ['三論玄義','T45 no. 1852','1','隋 吉藏撰','宗義 · 破邪顯正 · 二藏','cn',0],
+  ['二諦義','T45 no. 1854','3','隋 吉藏撰','宗義 · 二諦','cn',0],
+  ['淨名玄論','T38 no. 1780','8','隋 吉藏撰','經論 · 《維摩》','cn',0]
+];
+
+const tb = document.querySelector('#txTable tbody');
+function renderTable(f){
+  tb.innerHTML = TEXTS.filter(t => f==='all' || t[5]===f).map(t=>{
+    const [name,id,juan,who,kind,cty,inLib] = t;
+    const pill = cty==='in' ? '<span class="pill in">印度</span>' : '<span class="pill cn">中國</span>';
+    const mark = inLib ? '<span style="color:var(--red)">●</span>' : '<span style="color:var(--ink-3)">○</span>';
+    return '<tr><td class="tt">'+name+'</td><td class="id">'+id+'</td><td>'+juan+'</td><td>'+who+'</td>'
+         + '<td>'+kind+'　'+pill+'</td><td style="text-align:center">'+mark+'</td></tr>';
+  }).join('');
+}
+renderTable('all');
+document.getElementById('txFilter').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  [...e.currentTarget.children].forEach(x => x.classList.toggle('on', x===b));
+  renderTable(b.dataset.f);
+});
+</script>
+</body>
+</html>
