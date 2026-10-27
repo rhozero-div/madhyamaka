@@ -51,13 +51,13 @@
 
 | 書名 | 大正藏編號 | 頁碼 | 卷 | 撰述 | 檢索 |
 |---|---|---|---|---|---|
-| 中論疏記 | T65 no. 2255 | pp. 1–248 | 8 | 日本 安澄撰 | CBETA 未收 |
-| 大乘三論大義鈔 | T70 no. 2296 | pp. 119–173 | 4 | 日本 玄叡集 | CBETA 未收 |
-| 三論玄疏文義要 | T70 no. 2299 | pp. 199–378 | 10 | 日本 珍海撰 | CBETA 未收 |
-| 三論名教抄 | T70 no. 2306 | pp. 693–832 | 15 | 日本 珍海撰 | CBETA 未收 |
-| 三論玄義檢幽集 | T70 no. 2300 | pp. 379–498 | 7 | 日本 澄禪撰 | CBETA 未收 |
+| 中論疏記 | T65 no. 2255 | pp. 1–248 | 8 | 日本 安澄撰 | [SAT](https://21dzk.l.u-tokyo.ac.jp/SAT/satdb2015.php?mode=detail&mode2=1&ob=1&num1=2255&vol=65&page=1) |
+| 大乘三論大義鈔 | T70 no. 2296 | pp. 119–173 | 4 | 日本 玄叡集 | [SAT](https://21dzk.l.u-tokyo.ac.jp/SAT/satdb2015.php?mode=detail&mode2=1&ob=1&num1=2296&vol=70&page=119) |
+| 三論玄疏文義要 | T70 no. 2299 | pp. 199–378 | 10 | 日本 珍海撰 | [SAT](https://21dzk.l.u-tokyo.ac.jp/SAT/satdb2015.php?mode=detail&mode2=1&ob=1&num1=2299&vol=70&page=199) |
+| 三論名教抄 | T70 no. 2306 | pp. 693–832 | 15 | 日本 珍海撰 | [SAT](https://21dzk.l.u-tokyo.ac.jp/SAT/satdb2015.php?mode=detail&mode2=1&ob=1&num1=2306&vol=70&page=693) |
+| 三論玄義檢幽集 | T70 no. 2300 | pp. 379–498 | 7 | 日本 澄禪撰 | [SAT](https://21dzk.l.u-tokyo.ac.jp/SAT/satdb2015.php?mode=detail&mode2=1&ob=1&num1=2300&vol=70&page=379) |
 
-續諸宗部五部，CBETA 未收電子本。其頁碼依 SAT 漢文大藏經文本庫（東京大學）所標大正藏頁次，與紙本可對照。
+續諸宗部五部，CBETA 未收電子本，故上表「檢索」列改指 SAT 漢文大藏經テキストデータベース（東京大學）。每一鏈接直達該經卷首，其後可按 TextNo.（經號）、Vol.（冊）、Page（頁）三項自行跳轉，亦可自 <https://21dzk.l.u-tokyo.ac.jp/SAT/> 進入檢索。SAT 所標頁次與大正藏紙本一致，可對照。
 
 ## 五、取文與校核
 
