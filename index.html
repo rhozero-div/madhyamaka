@@ -161,8 +161,10 @@ blockquote.q cite{display:block;font-family:var(--sans);font-style:normal;font-s
 .ev[data-c="cn"] .ev-b::before{border-color:var(--red)}
 .ev[data-c="jp"] .ev-b::before{border-color:var(--jade)}
 .ev[data-c="md"] .ev-b::before{border-color:var(--ink-3)}
-.ev h4{margin:0 0 5px;font-size:18px;font-weight:600;letter-spacing:.05em;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.ev p{margin:0;font-size:15px;color:var(--ink-2);line-height:1.9;max-width:680px}
+.tl-sep{display:flex;align-items:center;gap:14px;margin:6px 0 22px}
+.tl-sep::before,.tl-sep::after{content:"";height:1px;background:var(--line);flex:1}
+.tl-sep span{font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:var(--ink-3);white-space:nowrap}
+.ev h4{margin:0 0 5px;font-size:18px;font-weight:600;letter-spacing:.05em;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ev p{margin:0;font-size:15px;color:var(--ink-2);line-height:1.9;max-width:680px}
 .tag{font-family:var(--sans);font-size:10px;letter-spacing:.14em;padding:2px 8px;border-radius:2px;white-space:nowrap}
 .tag-in{color:var(--gold);background:rgba(163,133,74,.11)}
 .tag-cn{color:var(--red);background:rgba(156,58,48,.09)}
@@ -450,7 +452,8 @@ footer li{margin-bottom:8px;line-height:1.8;font-size:13.4px}
     </div>
     <p class="lede rv">
       同一套文本，在三個國家被讀出了不同的重心：印度關心<strong>論證是否成立</strong>，中國關心<strong>教相如何安頓</strong>，
-      日本關心<strong>宗義如何承襲</strong>。年表按國別著色，可篩選。
+      日本關心<strong>宗義如何承襲</strong>。十九世紀中葉以後，梵本與藏譯陸續出土，中觀又添一重身分——
+      <strong>可供校勘、比對的文本</strong>；年表末段收近代研究，含歐洲、日本、漢語學界三系。全表按類別著色，可篩選。
     </p>
     <div class="filters" id="tlFilter">
       <button class="on" data-f="all">全部</button>
@@ -551,15 +554,116 @@ footer li{margin-bottom:8px;line-height:1.8;font-size:13.4px}
         <div class="ev-b"><h4>凝然與「三論宗」之名<span class="tag tag-jp">日本</span></h4>
         <p>東大寺凝然（1240–1321）撰《八宗綱要鈔》《三國佛法傳通緣起》，確立三論宗的祖統與宗名。值得注意的是：唐宋漢地文獻並無「三論宗」的自稱，此名實由日本學僧整理而成。</p></div>
       </article>
+      <div class="tl-sep" data-c="md"><span>近代研究 · 文獻學與義理學的重建</span></div>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1844</div>
+        <div class="ev-b"><h4>布奴夫《印度佛教史導論》<span class="tag tag-md">歐洲</span></h4>
+        <p>布奴夫（Eugène Burnouf）以尼泊爾所出梵文寫本講述印度佛教，佛學研究自此成為一門現代學科。其後《中論》不再只靠漢譯與註疏流傳，而有了梵本可與對讀。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1900</div>
+        <div class="ev-b"><h4>河口慧海入藏<span class="tag tag-md">日本</span></h4>
+        <p>河口慧海經尼泊爾抵拉薩，攜回大批藏文典籍。藏譯《中論》與《明句論》等注疏系統此後成為日本學界的常用資料，「梵、漢、藏對勘」的條件至此才算齊備。</p></div>
+      </article>
       <article class="ev" data-c="md">
         <div class="ev-y">1903–1913</div>
-        <div class="ev-b"><h4>《明句論》梵本校訂<span class="tag tag-md">近代研究</span></h4>
-        <p>蒲桑（L. de La Vallée Poussin）校訂月稱《明句論》，中觀研究進入文獻學時代。梵本《中論》即以該書所收頌文為底本。</p></div>
+        <div class="ev-b"><h4>《明句論》梵本校訂<span class="tag tag-md">歐洲</span></h4>
+        <p>蒲桑（L. de La Vallée Poussin）校訂月稱《明句論》，收入《佛教文庫》第四種。中觀研究自此進入文獻學時代；梵本《中論》頌文長期即以該書所收為底本，至狄雍 1978 年重校。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1927</div>
+        <div class="ev-b"><h4>舍爾巴茨基《涅槃之概念》<span class="tag tag-md">歐洲</span></h4>
+        <p>舍爾巴茨基（Th. Stcherbatsky）以康德哲學的框架重述「空有之爭」，把中觀與唯識的對立讀成兩種理性結構的衝突。此書影響西方中觀研究近半個世紀。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1938</div>
+        <div class="ev-b"><h4>湯用彤《漢魏兩晉南北朝佛教史》<span class="tag tag-md">中國</span></h4>
+        <p>首次把三論學放進中國思想史的整體脈絡：羅什譯場、僧肇四論、攝山諸師的傳承，自此有了現代學術意義上的系譜。書中論「本無」「即色」諸家與般若學的關係，至今仍是討論的起點。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1941</div>
+        <div class="ev-b"><h4>山口益《佛教中的有與無》<span class="tag tag-md">日本</span></h4>
+        <p>山口益留法從烈維（S. Lévi）學梵、藏，返日後以《中論》頌與《明句論》對讀，確立日本中觀學的文獻學路數。其《中觀佛教論考》（1944）進一步清理月稱與清辨的分歧。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1944</div>
+        <div class="ev-b"><h4>印順《性空學探源》<span class="tag tag-md">中國</span></h4>
+        <p>講於 1944 年，1950 年出版。把中觀空義上溯至《阿含》的「第一義空」，主張龍樹是「性空唯名」的繼承者，而非形上學的創新者。此說與西方將龍樹讀作「絕對主義」的進路形成長期對話。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1950</div>
+        <div class="ev-b"><h4>印順《中觀今論》<span class="tag tag-md">中國</span></h4>
+        <p>以「緣起性空」重建中觀的方法論，並回應現代哲學與科學的知識處境。書中對「自性」的語義分析、對「空即絕對」的批判，是漢語中觀研究被引用最多的論述之一。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1952</div>
+        <div class="ev-b"><h4>印順《中觀論頌講記》<span class="tag tag-md">中國</span></h4>
+        <p>1942–43 年講，1952 年出版。逐品講解《中論》，為漢地第一部完整的現代《中論》講義。書中大量比對《阿含》《般若》與部派論書，使「三是偈」的解釋不再局限於吉藏一系。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1955</div>
+        <div class="ev-b"><h4>穆蒂《佛教的中觀哲學》<span class="tag tag-md">印度</span></h4>
+        <p>穆蒂（T. R. V. Murti）把中觀讀作一套「批判哲學」，以龍樹的歸謬法與康德的二律背反相類比，並與吠檀多不二論對照。中譯本（郭忠生譯）題《中觀哲學》，影響華語學界甚深。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1967</div>
+        <div class="ev-b"><h4>羅賓遜《印度與中國的早期中觀》<span class="tag tag-md">歐洲</span></h4>
+        <p>羅賓遜（R. H. Robinson）以僧肇、吉藏為中心，追問「印度的論證到了中國為何變成教相」。此書開創「中觀在中國」的研究範式，也讓三論宗首次進入英語學界的視野。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1969（一說 1973）</div>
+        <div class="ev-b"><h4>梶山雄一《空之論理》<span class="tag tag-md">日本</span></h4>
+        <p>與上山春平合著，為角川書店「佛教思想」叢書之一。以現代邏輯分析龍樹的論證結構，並分判中觀為「歸謬」與「自立」兩系；中譯本題《佛教中觀哲學》（吳汝鈞譯）。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1978</div>
+        <div class="ev-b"><h4>狄雍重校《中論頌》梵本<span class="tag tag-md">歐洲</span></h4>
+        <p>狄雍（J. W. de Jong）依新見寫本重校頌文，訂正蒲桑本多處，成為此後三十年間通用的梵文底本；葉少勇 2011 年的合校本即以之為主要參校本。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1979</div>
+        <div class="ev-b"><h4>呂澂《印度佛學源流略講》《中國佛學源流略講》<span class="tag tag-md">中國</span></h4>
+        <p>二書原為一九六〇年代講稿，1979 年始刊行。呂澂以「性空唯名」判中觀，並依藏譯與梵本校正舊說，與印順同為現代漢地中觀研究的两條主線。</p></div>
       </article>
       <article class="ev" data-c="md">
         <div class="ev-y">1985</div>
-        <div class="ev-b"><h4>《中論偈頌總覽》<span class="tag tag-md">近代研究</span></h4>
-        <p>三枝充悳彙編梵、漢三本、藏譯兩系《中論》偈頌並附日譯，成為今日研讀《中論》的標準對照工具書。日本學界（山口益、梶山雄一等）的中觀研究亦在此前後達到高峰。</p></div>
+        <div class="ev-b"><h4>三枝充悳《中論偈頌總覽》<span class="tag tag-md">日本</span></h4>
+        <p>彙編梵本、漢譯三本、藏譯兩系《中論》偈頌並附日譯，逐頌對照編號。今日研讀《中論》所用的偈號（如「三是偈」為 24.18），大抵依此書。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1985</div>
+        <div class="ev-b"><h4>印順《空之探究》<span class="tag tag-md">中國</span></h4>
+        <p>清理「空」在《阿含》、般若、中觀、如來藏四個層次中的演變，指出「空」由修行法門轉為存在論範疇的過程。書末對「空」與「有」的判攝，可視為其晚年定論。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">1998</div>
+        <div class="ev-b"><h4>萬金川《中觀思想講錄》<span class="tag tag-md">臺灣</span></h4>
+        <p>以講錄形式介紹中觀的文獻與思想史，特別著力於《中論》偈頌的版本問題與青目釋的性質，是華語學界常見的入門書。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">2006</div>
+        <div class="ev-b"><h4>聖凱《攝論學派研究》<span class="tag tag-md">中國</span></h4>
+        <p>以南北朝學派格局為背景，考察攝論師與三論師的互動：真諦一系與興皇、嘉祥一系在「二諦」「佛性」上的分歧，由此可見三論學並非孤峰獨起。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">2008</div>
+        <div class="ev-b"><h4>董群《中國三論宗通史》<span class="tag tag-md">中國</span></h4>
+        <p>第一部三論宗通史，從羅什譯場一路寫到近代，補足了宗派史長期依附於天台、華嚴敘述的缺環。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">2010</div>
+        <div class="ev-b"><h4>賴永海主編《中國佛教通史》<span class="tag tag-md">中國</span></h4>
+        <p>十五卷本，三論宗與攝山—嘉祥一系列為專卷。此書把三論學放回王朝政治、譯經制度與學派競爭的整體之中，是近年通史書寫的代表。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">2011</div>
+        <div class="ev-b"><h4>葉少勇《中論頌——梵藏漢合校·導讀·譯注》<span class="tag tag-md">中國</span></h4>
+        <p>以西藏所出六至七世紀梵文貝葉殘本為據重校頌文（2005 年於倫敦首次公布），並提出「認識論虛無主義」的讀法：龍樹所破的是「自性即存在」的預設，而非僅是概念的執著。此說在漢語學界引起持續討論。</p></div>
+      </article>
+      <article class="ev" data-c="md">
+        <div class="ev-y">2021</div>
+        <div class="ev-b"><h4>葉少勇《〈中論佛護釋〉譯注》<span class="tag tag-md">中國</span></h4>
+        <p>佛護《根本中論註》此前僅存藏譯，葉少勇依新發現的梵本殘卷校譯，使應成派的源頭文獻首次有了可用的漢譯本。</p></div>
       </article>
     </div>
   </div>
@@ -897,9 +1001,11 @@ footer li{margin-bottom:8px;line-height:1.8;font-size:13.4px}
     <div class="rv" style="margin-top:42px">
       <h3 style="font-size:19px;letter-spacing:.08em;margin:0 0 14px">近代：文獻學的中觀</h3>
       <p style="font-size:15.4px;color:var(--ink-2);line-height:2;max-width:840px;margin:0">
-        明治以後，日本學界以梵、漢、藏對勘的方法重構中觀史。山口益、梶山雄一（《空の論理》，中譯《佛教中觀哲學》）、
-        三枝充悳（《中論偈頌總覽》，1985）等人的工作，使《中論》從「宗派典籍」變成了「可校勘、可比對的文本」。
+        明治以後，日本學界以梵、漢、藏對勘的方法重構中觀史。河口慧海 1900 年入藏，攜回藏文注疏；
+        荻原雲來的梵文辭書工作，則為對勘提供了工具。山口益、梶山雄一（《空の論理》，中譯《佛教中觀哲學》）、
+        三枝充悳（《中論偈頌總覽》，1985）等人的研究，使《中論》從「宗派典籍」變成了「可校勘、可比對的文本」。
         今日我們能同時看到梵本頌文、漢譯三本與藏譯兩系，很大程度上要歸功於這一脈研究。
+        年表末段另收歐洲與漢語學界的相關工作，可參看。
       </p>
     </div>
   </div>
@@ -1016,6 +1122,7 @@ footer li{margin-bottom:8px;line-height:1.8;font-size:13.4px}
           <li>人物生卒年多為學界推定，以「約」標示</li>
           <li>《中論》偈數依漢譯品題自標合計 456 偈；吉藏審核作 446 偈，古來通稱五百偈</li>
           <li>「三論宗」宗名與祖統主要由日本學僧整理，唐宋漢地並無此自稱</li>
+          <li>年表近代部分依著作初版年（或講說年）編次，同一年內數事並列；出版年有異說者隨文註明</li>
         </ul>
       </div>
     </div>
@@ -1054,7 +1161,7 @@ tlFilter.addEventListener('click', e => {
   const b = e.target.closest('button'); if(!b) return;
   [...tlFilter.children].forEach(x => x.classList.toggle('on', x===b));
   const f = b.dataset.f;
-  document.querySelectorAll('#tlList .ev').forEach(ev => {
+  document.querySelectorAll('#tlList .ev, #tlList .tl-sep').forEach(ev => {
     ev.style.display = (f==='all' || ev.dataset.c===f) ? '' : 'none';
   });
 });
