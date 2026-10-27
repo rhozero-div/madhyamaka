@@ -1133,13 +1133,15 @@ footer li{margin-bottom:8px;line-height:1.8;font-size:13.4px}
       <span class="en">Texts</span>
     </div>
     <p class="lede rv">
-      下表二十五部，均已收入資料庫「中觀論」文件夾，可對讀全文：印度論典十五部、漢地撰述十部。
-      可按國別篩選；「庫藏」一欄標示該書全文是否已在資料庫中。
+      下表三十部：印度論典十五部、漢地撰述十部、日本撰述五部。
+      前二十五部已收入資料庫「中觀論」文件夾，可對讀全文；日本五部為大正藏續諸宗部所收，
+      標 ○ 以示尚待入庫。可按國別篩選。
     </p>
     <div class="filters" id="txFilter">
       <button class="on" data-f="all">全部</button>
       <button data-f="in">印度</button>
       <button data-f="cn">中國</button>
+      <button data-f="jp">日本</button>
     </div>
     <div class="tablewrap rv">
       <table id="txTable">
@@ -1149,7 +1151,7 @@ footer li{margin-bottom:8px;line-height:1.8;font-size:13.4px}
     </div>
     <p class="flow-note rv" style="margin-top:14px">
       卷數依大正藏經錄，並據 CBETA 電子文本核對。「性質」為編者所加，便於檢索，非傳統分類。
-      表中二十五部全文皆已收入資料庫，可逐部調閱原書。
+      日本五部皆注疏、宗義之屬，近代研究著作不入此表（見年表末段）。
     </p>
   </div>
 </section>
@@ -1330,14 +1332,21 @@ const TEXTS = [
   ['十八空論','T31 no. 1616','1','龍樹造 · 真諦譯','論義 · 十八空','in',1],
   ['三論玄義','T45 no. 1852','1','隋 吉藏撰','宗義 · 破邪顯正 · 二藏','cn',1],
   ['二諦義','T45 no. 1854','3','隋 吉藏撰','宗義 · 二諦','cn',1],
-  ['淨名玄論','T38 no. 1780','8','隋 吉藏撰','經論 · 《維摩》','cn',1]
+  ['淨名玄論','T38 no. 1780','8','隋 吉藏撰','經論 · 《維摩》','cn',1],
+  ['中論疏記','T65 no. 2255','8','日本 安澄撰','注疏 · 存吉藏舊說與諸家異解','jp',0],
+  ['大乘三論大義鈔','T70 no. 2296','4','日本 玄叡集','宗義 · 天長六本宗書之一','jp',0],
+  ['三論玄疏文義要','T70 no. 2299','10','日本 珍海撰','宗義綱要 · 摘吉藏諸疏','jp',0],
+  ['三論名教抄','T70 no. 2306','15','日本 珍海撰','名目集釋 · 八不 · 佛性 · 二諦','jp',0],
+  ['三論玄義檢幽集','T70 no. 2300','7','日本 澄禪撰','集註 · 引今已佚之書','jp',0]
 ];
 
 const tb = document.querySelector('#txTable tbody');
 function renderTable(f){
   tb.innerHTML = TEXTS.filter(t => f==='all' || t[5]===f).map(t=>{
     const [name,id,juan,who,kind,cty,inLib] = t;
-    const pill = cty==='in' ? '<span class="pill in">印度</span>' : '<span class="pill cn">中國</span>';
+    const pill = cty==='in' ? '<span class="pill in">印度</span>'
+               : cty==='cn' ? '<span class="pill cn">中國</span>'
+               : '<span class="pill jp">日本</span>';
     const mark = inLib ? '<span style="color:var(--red)">●</span>' : '<span style="color:var(--ink-3)">○</span>';
     return '<tr><td class="tt">'+name+'</td><td class="id">'+id+'</td><td>'+juan+'</td><td>'+who+'</td>'
          + '<td>'+kind+'　'+pill+'</td><td style="text-align:center">'+mark+'</td></tr>';
