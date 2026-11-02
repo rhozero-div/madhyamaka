@@ -75,6 +75,8 @@ async function countUses() {
 function rowEl(t) {
   const d = document.createElement("div");
   d.className = "g-row"; d.dataset.k = t.k;
+  d.setAttribute("role", "button");
+  d.tabIndex = 0;
   const has = t.t && t.t.trim();
   const n = USES[t.k] || 0;
   d.innerHTML =
@@ -82,9 +84,68 @@ function rowEl(t) {
     '<span class="g-aka">' + esc((t.aka || []).join("　")) + "</span>" +
     '<span class="g-t' + (has ? "" : " wait") + '">' +
       (has ? esc(t.t.replace(/\s+/g, " ").slice(0, 60)) : "待撰") + "</span>" +
-    '<span class="g-n">' + (n ? n : "") + "</span>";
-  d.onclick = () => openEdit(t);
+    '<span class="g-n">' + (n ? n : "") + "</span>" +
+    '<span class="g-car" aria-hidden="true">›</span>';
+  d.onclick = () => toggleRow(d, t);
+  d.onkeydown = e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleRow(d, t); }
+  };
   return d;
+}
+
+/* 點一條即就地展開全文，適合通讀；再點收起。
+   一次只開一條——「空」這類長條有九百多字，同時開幾條會把列表撐散。 */
+function panelEl(t) {
+  const box = document.createElement("div");
+  box.className = "g-panel";
+  const meta = [];
+  if ((t.aka || []).length) meta.push("異名　" + t.aka.join("、"));
+  if ((t.refs || []).length) meta.push("所據　" + t.refs.join("、"));
+  let h = "";
+  if (meta.length) h += '<p class="g-p-meta">' + esc(meta.join("　｜　")) + "</p>";
+
+  const paras = (t.t || "").split(/\n+/).map(s => s.trim()).filter(Boolean);
+  h += paras.length
+    ? paras.map(s => "<p>" + esc(s) + "</p>").join("")
+    : '<p class="g-p-meta">釋義待撰</p>';
+
+  // 所引：與術語卡的引文同一格式，書名・品名・引文・行號四層
+  if (t.src && t.src.length) {
+    h += '<div class="tc-quote"><div class="tq-k">所引</div>' + t.src.map(s => {
+      const o = typeof s === "string" ? { w: s } : s;
+      let x = '<div class="tq-h">' + esc([o.w, o.p].filter(Boolean).join("　")) + "</div>";
+      if (o.q) x += '<div class="tq-q">' + esc(o.q) + "</div>";
+      if (o.l) x += '<div class="tq-l">' + esc(o.l) + "</div>";
+      return x;
+    }).join("") + "</div>";
+  }
+
+  // 本機才有改動的必要；線上藏起，免得讀者以為壞了
+  if (LIVE) h += '<p class="g-p-edit"><span>編輯這條 →</span></p>';
+  box.innerHTML = h;
+  if (LIVE) box.querySelector(".g-p-edit").onclick = e => {
+    e.stopPropagation();
+    openEdit(t);
+  };
+  return box;
+}
+
+function toggleRow(row, t) {
+  const wasOpen = row.classList.contains("on");
+  document.querySelectorAll(".g-row.on").forEach(r => r.classList.remove("on"));
+  document.querySelectorAll(".g-panel").forEach(p => p.remove());
+  if (wasOpen) return;
+  row.classList.add("on");
+  const panel = panelEl(t);
+  row.after(panel);
+  // 展開後若底部落到視口外：短條整條挪進來，長條則把行頂對到頂欄之下，從頭讀起
+  try {
+    const pr = panel.getBoundingClientRect();
+    if (pr.bottom > window.innerHeight - 12) {
+      const fits = pr.height + 76 < window.innerHeight;
+      (fits ? panel : row).scrollIntoView({ block: fits ? "end" : "start", behavior: "smooth" });
+    }
+  } catch (e) { /* 老瀏覽器沒有 scrollIntoView 選項，忽略 */ }
 }
 
 function render() {
@@ -218,7 +279,7 @@ $("#gt").addEventListener("input", () => grow($("#gt")));
     const sub = $("#gSub");
     if (sub) {
       sub.innerHTML = "注文中可點之詞，釋義皆在此。留空者標「待撰」，暫不在注文裡加鏈。<br>" +
-        "線上為唯讀：點任一條可看全文；改動請在本機開啟服務後進行。";
+        "點任一條即展開全文，再點收起。線上為定稿只讀本，改動請在本機服務中進行。";
     }
   }
 
@@ -227,8 +288,11 @@ $("#gt").addEventListener("input", () => grow($("#gt")));
     const t = TERMS.find(x => x.k === h);
     if (t) {
       const row = document.querySelector('.g-row[data-k="' + h.replace(/"/g, '\\"') + '"]');
-      if (row) row.scrollIntoView({ block: "center" });
-      openEdit(t);
+      if (row) {
+        // 從注文點進來的詞：先就位，再展開，展開區不會把頁面推得亂跳
+        try { row.scrollIntoView({ block: "start" }); } catch (e) {}
+        toggleRow(row, t);
+      }
     } else if (LIVE) {
       openEdit({ k: h, t: "", aka: [], auto: true, refs: [] }, true);
     }

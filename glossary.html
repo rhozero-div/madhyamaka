@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="assets/reader.css?v=24">
 <style>
 .gpage{padding:56px 22px 200px}
+/* 頂欄是 sticky，錨點與展開後的自動捲動都留出它的高度 */
+html{scroll-padding:66px 0 28px}
 .gwrap{max-width:720px;margin:0 auto}
 .g-kicker{font-family:var(--sans);font-size:10.5px;letter-spacing:.34em;color:var(--gold);margin:0 0 14px}
 .g-h1{font-size:32px;font-weight:600;letter-spacing:.2em;margin:0 0 14px}
@@ -42,6 +44,42 @@
 .ed-ro{font-size:12.5px;line-height:1.85;color:var(--ink-3);letter-spacing:.02em}
 .g-chk{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-2);padding-top:8px}
 .g-empty{padding:26px 8px;font-family:var(--sans);font-size:12.5px;color:var(--ink-3)}
+
+/* 點一條即就地展開全文：一次只開一條，免得長條把列表撐散 */
+.g-car{
+  flex:none;width:.8em;text-align:center;
+  font-family:var(--sans);font-size:11px;color:var(--ink-3);transition:transform .18s;
+}
+.g-row.on{background:rgba(156,58,48,.05);box-shadow:inset 2px 0 0 rgba(156,58,48,.35)}
+.g-row.on .g-car{transform:rotate(90deg);color:var(--red)}
+.g-panel{
+  margin:0 0 2px;padding:6px 16px 20px;
+  border-bottom:1px solid var(--line-2);
+  background:linear-gradient(180deg,rgba(156,58,48,.035),rgba(156,58,48,0) 62%);
+}
+.g-panel p{
+  font-size:14.5px;line-height:2.05;letter-spacing:.01em;color:var(--ink);
+  margin:0 0 14px;text-align:justify;
+}
+.g-panel p:last-child{margin-bottom:0}
+.g-panel .g-p-meta{
+  font-family:var(--sans);font-size:11px;line-height:1.95;letter-spacing:.05em;
+  color:var(--ink-3);margin:0 0 12px;text-align:left;
+}
+.g-panel .g-p-edit{
+  margin:16px 0 0;padding-top:12px;border-top:1px dashed var(--line);
+  font-family:var(--sans);font-size:11.5px;letter-spacing:.08em;color:var(--red);
+  cursor:pointer;text-align:left;
+}
+.g-panel .g-p-edit:hover{opacity:.72}
+.g-panel .tc-quote{margin:16px 0 0;padding-left:12px;border-left-color:rgba(156,58,48,.22)}
+.g-panel .tc-quote > * + *{margin-top:9px}      /* 一條引文與下一條之間留白 */
+.g-panel .tc-quote .tq-q,.g-panel .tc-quote .tq-l{margin-top:2px}
+.g-panel .tq-q{font-size:13px;line-height:2}
+@media (max-width:720px){
+  .g-panel{padding:4px 10px 16px}
+  .g-panel p{font-size:14px;line-height:2}
+}
 @media (max-width:720px){
   .gpage{padding:34px 16px 190px}
   .g-h1{font-size:26px}
@@ -65,10 +103,7 @@
   <h1 class="g-h1">術語表</h1>
   <p class="g-sub" id="gSub">
     注文中可點之詞，釋義在此撰寫。留空者標「待撰」，暫不在注文裡加鏈。<br>
-    點任一條即可編輯；右端數字是該詞在現有注文中出現的次數。
-  </p>
-    注文中可點之詞，釋義在此撰寫。留空者標「待撰」，暫不在注文裡加鏈。<br>
-    點任一條即可編輯；右端數字是該詞在現有注文中出現的次數。
+    點任一條即展開全文，再點收起；右端數字是該詞在現有注文中出現的次數。
   </p>
 
   <div class="g-bar">
@@ -100,6 +135,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="assets/glossary.js?v=24"></script>
+<script src="assets/glossary.js?v=25"></script>
 </body>
 </html>
