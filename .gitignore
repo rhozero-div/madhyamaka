@@ -1,2 +1,17 @@
 .workbuddy/
 .DS_Store
+
+# 只入库线上所需者，其余留在本机
+serve.py
+*.command
+
+# 《中观论疏》尚未整理完，暂不上线
+T42n1824.html
+text/T42n1824.json
+annotations/T42n1824.json
+sources/
+tools/
+
+# 注文与术语的历次备份，不入库
+annotations/_*.json
+glossary/_*.json

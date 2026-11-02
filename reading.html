@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>閱讀 · 經論原文與注疏</title>
+<link rel="stylesheet" href="assets/reader.css?v=24">
+<style>
+.lib{padding:66px 22px 120px}
+.lib-wrap{max-width:660px;margin:0 auto}
+.lib-kicker{font-family:var(--sans);font-size:10.5px;letter-spacing:.34em;color:var(--gold);margin:0 0 16px}
+.lib-h1{font-size:34px;font-weight:600;letter-spacing:.2em;margin:0 0 16px}
+.lib-sub{font-size:14.5px;line-height:2.05;color:var(--ink-2);margin:0 0 42px;letter-spacing:.02em}
+.card{
+  display:flex;align-items:center;gap:20px;
+  padding:21px 22px;margin:0 0 13px;
+  border:1px solid var(--line);border-radius:6px;background:var(--paper-2);
+  transition:border-color .2s,background .2s,transform .2s;
+}
+.card:hover{border-color:rgba(156,58,48,.32);background:#fffdf8;transform:translateY(-1px)}
+.card-main{flex:1;min-width:0}
+.card h2{font-size:19px;font-weight:600;letter-spacing:.1em;margin:0 0 7px}
+.card h2 small{
+  font-family:var(--sans);font-size:10.5px;font-weight:400;letter-spacing:.1em;
+  color:var(--gold);margin-left:9px;vertical-align:1px;
+}
+.card-meta{font-family:var(--sans);font-size:11px;letter-spacing:.06em;color:var(--ink-3);margin:0 0 9px}
+.card-desc{font-size:13.5px;line-height:1.95;color:var(--ink-2);margin:0;letter-spacing:.01em}
+.card-go{font-family:var(--sans);font-size:12px;letter-spacing:.06em;color:var(--red);flex:none}
+.lib-note{
+  margin:34px 0 0;padding:14px 16px;
+  border-left:2px solid rgba(156,58,48,.18);
+  font-size:12.5px;line-height:1.95;color:var(--ink-3);letter-spacing:.01em;
+}
+.lib-note code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--paper-3);padding:2px 6px;border-radius:3px}
+.lib-back{margin-top:36px;font-family:var(--sans);font-size:12px;letter-spacing:.1em;color:var(--ink-3)}
+.lib-back a:hover{color:var(--red)}
+/* 線上（GitHub Pages）只放已定稿的心經與術語表；論疏只在本機出現 */
+html[data-env="web"] [data-local]{display:none!important}
+html[data-env="local"] [data-web]{display:none!important}
+@media (max-width:720px){
+  .lib{padding:40px 16px 90px}
+  .lib-h1{font-size:27px}
+  .card{padding:17px 16px;gap:12px}
+  .card-desc{font-size:13px}
+  .card-go{display:none}
+}
+</style>
+<script>
+/* 只在本機（localhost / 127.0.0.1 / file:）顯示論疏與本地說明；
+   推到 GitHub Pages 後自動隱去，免得留下打不開的卡片。
+   放在 head 裡先定環境，樣式即刻生效，不閃。 */
+(function () {
+  var local = location.protocol === "file:" ||
+    /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+  document.documentElement.dataset.env = local ? "local" : "web";
+})();
+</script>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="index.html"><span class="seal">觀</span><b>中觀學</b></a>
+  <nav class="crumb"><i>›</i><span>閱讀</span></nav>
+  <div class="where"></div>
+  <div class="tools"><a href="index.html">首頁</a></div>
+</header>
+
+<main class="lib"><div class="lib-wrap">
+
+  <p class="lib-kicker">Reading</p>
+  <h1 class="lib-h1">閱讀</h1>
+  <p class="lib-sub" data-local>
+    原文與注疏，邊讀邊注。<br>
+    選中即注，注在節末，另有白文對照。
+  </p>
+  <p class="lib-sub" data-web>
+    原典與注文，隨文對讀。<br>
+    點句末注號看注，注中帶色的詞可點開釋義。
+  </p>
+
+  <div class="lib-list">
+
+    <a class="card" href="T42n1824.html" data-local>
+      <div class="card-main">
+        <h2>中觀論疏<small>二十卷</small></h2>
+        <p class="card-meta">隋 · 吉藏撰　｜　大正藏 T42 no. 1824</p>
+        <p class="card-desc">三論宗根本章疏，逐句疏解《中論》二十七品。全本 289,068 字，依問答回合分 1,541 節。</p>
+      </div>
+      <span class="card-go">進入 →</span>
+    </a>
+
+    <a class="card" href="T08n0251.html">
+      <div class="card-main">
+        <h2>般若波羅蜜多心經<small>一卷</small></h2>
+        <p class="card-meta">唐 · 玄奘譯　｜　大正藏 T08 no. 251</p>
+        <p class="card-desc">二百六十字，按句讀分 16 節，一屏到底。注文逐句而設，篇幅最短，宜先自此入。</p>
+      </div>
+      <span class="card-go">進入 →</span>
+    </a>
+
+
+    <a class="card" href="glossary.html">
+      <div class="card-main">
+        <h2>術語表<small>隨注而長</small></h2>
+        <p class="card-meta">注文中可點之詞　｜　釋義由撰者自寫</p>
+        <p class="card-desc">緣起、自性、二諦、五蘊一類名相，注裡只鏈一次，點開即見釋義。未撰者標「待撰」，暫不加鏈。</p>
+      </div>
+      <span class="card-go">進入 →</span>
+    </a>
+
+  </div>
+
+  <p class="lib-note" data-local>
+    注文存於 <code>annotations/</code>，改一筆即落盤一筆。這些頁面須由本地服務提供——雙擊項目根目錄的
+    <code>開啟論疏.command</code>／<code>開啟心經.command</code> 即可，或於終端執行 <code>python3 serve.py</code>。
+  </p>
+
+  <p class="lib-note" data-web>
+    此為線上只讀本：注文與術語表皆為靜態檔，可讀注、可點術語，不提供加注與編輯。<br>
+    《中觀論疏》尚在整理，暫未上線，僅本機可讀。
+  </p>
+
+  <p class="lib-back"><a href="index.html">← 返回中觀學綜述</a></p>
+
+</div></main>
+
+</body>
+</html>

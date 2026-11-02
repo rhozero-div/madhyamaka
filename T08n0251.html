@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>般若波羅蜜多心經 · 閱讀</title>
+<link rel="stylesheet" href="assets/reader.css?v=24">
+</head>
+<body data-text="T08n0251" data-mode="short">
+<div id="bar"></div>
+
+<header class="top">
+  <a class="brand" href="reading.html" title="返回閱讀目錄"><span class="seal">心</span><b>般若心經</b></a>
+  <nav class="crumb"><a href="index.html">中觀學</a><i>›</i><a href="reading.html">閱讀</a></nav>
+  <div class="where" id="where"></div>
+  <div class="tools">
+    <button id="cleanBtn" aria-pressed="false" title="只看白文">白文</button>
+    <button id="fsMinus" title="小字">A−</button>
+    <button id="fsPlus" title="大字">A＋</button>
+    <a href="glossary.html" title="術語表：注文中可點之詞的釋義">術語</a>
+    <button id="tocBtn" aria-pressed="false">目錄</button>
+  </div>
+</header>
+
+<aside id="toc"><div class="toc-in">
+  <p class="toc-t">目錄</p>
+  <div id="tocList"></div>
+</div></aside>
+
+<main id="reader"><article id="body"></article></main>
+
+<button class="tip" id="tip">加注</button>
+
+<div class="editor" id="editor">
+  <div class="ed-in">
+    <div class="ed-quote" id="edQuote"></div>
+    <div class="ed-fields">
+      <label class="ed-f"><span class="ed-k k-yuan">原義</span><textarea id="edYuan" rows="1" placeholder="阿含、毗曇中的定義，一句話，四十字內"></textarea></label>
+      <label class="ed-f"><span class="ed-k k-guan">觀義</span><textarea id="edGuan" rows="2" placeholder="依中觀重讀：為何無自性；空亦復空後如何安立"></textarea></label>
+      <label class="ed-f"><span class="ed-k k-chuan">串講</span><textarea id="edChuan" rows="1" placeholder="整句通釋，可空"></textarea></label>
+      <div class="ed-f ed-srcf">
+        <span class="ed-k">所引</span>
+        <div class="ed-srcbox">
+          <div class="ed-srcs" id="edSrcList"></div>
+          <button type="button" class="ed-addsrc" id="edAddSrc">＋ 書名／品名／原文</button>
+        </div>
+      </div>
+      <label class="ed-f" id="edLegacyWrap" style="display:none"><span class="ed-k">舊注</span><textarea id="edLegacy" rows="2" placeholder="未分層的舊注文，可剪入上三欄"></textarea></label>
+    </div>
+    <div class="ed-act">
+      <span class="hint" id="edHint">三欄皆可空，填一欄即可存</span>
+      <button id="edCancel">取消</button>
+      <button id="edSave" class="pri">存</button>
+    </div>
+  </div>
+</div>
+
+<div class="tcard" id="tcard" hidden>
+  <div class="tc-h"><b id="tcTerm"></b><button id="tcClose" title="關閉">×</button></div>
+  <div id="tcBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/reader.js?v=24"></script>
+</body>
+</html>
