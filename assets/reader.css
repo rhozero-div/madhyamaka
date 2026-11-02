@@ -354,3 +354,21 @@ body.clean .unit{text-indent:0}
 
 /* 塊級容器裡的輸入單元要顯式滿寬（flex 規則管不到） */
 .ed-f .ed-srow textarea,.ed-f .ed-srow .sl{width:100%}
+
+/* ---------- 頁腳：聯繫 ----------
+   各頁放在自己的內容容器末尾，寬度隨容器；閱讀頁的容器是整幅，
+   故給 672px 上限與正文對齊。 */
+.pfoot{
+  max-width:672px;margin:56px auto 0;padding-top:18px;
+  border-top:1px solid var(--line);
+  font-family:var(--sans);font-size:11.5px;letter-spacing:.05em;
+  color:var(--ink-3);line-height:1.9;text-align:center;
+}
+.pfoot a{
+  color:var(--ink-2);border-bottom:1px solid var(--line);
+  padding-bottom:1px;transition:.18s;
+}
+.pfoot a:hover{color:var(--red);border-bottom-color:rgba(156,58,48,.35)}
+.lib-wrap .pfoot,.gwrap .pfoot{max-width:none}
+body[data-mode="short"] .pfoot{max-width:640px}
+@media (max-width:720px){ .pfoot{margin-top:40px} }
