@@ -372,3 +372,79 @@ body.clean .unit{text-indent:0}
 .lib-wrap .pfoot,.gwrap .pfoot{max-width:none}
 body[data-mode="short"] .pfoot{max-width:640px}
 @media (max-width:720px){ .pfoot{margin-top:40px} }
+
+
+/* ---------- 目次屏（一分一頁之書） ---------- */
+body.frontview #body{max-width:760px}
+.front{padding-top:6px}
+.front-t{
+  font-family:var(--serif);font-size:calc(var(--fs)*1.62);font-weight:600;
+  letter-spacing:.2em;text-align:center;margin:0 0 12px;text-indent:0;
+}
+.front-a{
+  text-align:center;font-family:var(--sans);font-size:11.5px;
+  letter-spacing:.16em;color:var(--ink-3);margin:0 0 8px;
+}
+.front-n{
+  text-align:center;font-family:var(--sans);font-size:11.5px;
+  letter-spacing:.06em;color:var(--ink-3);margin:0 0 32px;
+}
+.front-list{
+  display:grid;grid-template-columns:1fr 1fr;gap:0 40px;
+  border-top:1px solid var(--line);padding-top:16px;
+}
+.front-col{min-width:0}
+.front-i{
+  display:flex;align-items:baseline;gap:10px;padding:10px 2px;
+  border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);
+  transition:background .16s;
+}
+.front-i i{
+  font-family:var(--sans);font-style:normal;font-size:11px;
+  color:var(--ink-3);min-width:3.4em;letter-spacing:.04em;
+}
+.front-i b{font-weight:400;font-size:calc(var(--fs)*.93);letter-spacing:.14em;flex:1}
+.front-i small{font-family:var(--sans);font-size:10.5px;color:var(--ink-3);letter-spacing:.04em}
+.front-i:hover{background:rgba(156,58,48,.04)}
+.front-i:hover b{color:var(--red)}
+.front-note{
+  margin:26px 0 0;text-align:center;font-family:var(--sans);
+  font-size:11px;color:var(--ink-3);letter-spacing:.05em;line-height:1.9;
+}
+@media (max-width:720px){
+  .front-list{grid-template-columns:1fr;gap:0}
+  .front-t{font-size:calc(var(--fs)*1.34)}
+}
+
+/* 偈頌：底本作兩行，不縮首行，整塊低兩格 */
+.unit.verse{white-space:pre-line;text-indent:0;padding-left:2em;margin-top:.2em}
+
+/* 頁末翻分 */
+.pnav{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:46px 0 0;padding-top:16px;border-top:1px solid var(--line);
+  font-family:var(--sans);font-size:11.5px;letter-spacing:.06em;color:var(--ink-3);
+}
+.pnav a{color:var(--ink-2);text-decoration:none;padding:6px 2px;transition:color .16s}
+.pnav a:hover{color:var(--red)}
+.pnav .pn-c{color:var(--ink-3);letter-spacing:.1em}
+.pnav .pn-x{width:5em}
+
+/* 一分一頁：分題居中作頁題，短分亦有一個重心 */
+.sec-h{text-align:center;margin:4px 0 40px}
+.sec-h .sec-n{
+  display:block;font-family:var(--sans);font-size:11px;
+  letter-spacing:.34em;color:var(--ink-3);margin-bottom:14px;
+}
+.sec-h .sec-t{
+  font-size:calc(var(--fs)*1.22);font-weight:600;letter-spacing:.26em;
+  margin:0 0 14px;text-indent:0;
+}
+.sec-h .sec-p{
+  display:block;font-family:var(--sans);font-size:10.5px;
+  letter-spacing:.08em;color:var(--ink-3);
+}
+@media (max-width:720px){
+  .sec-h{margin-bottom:30px}
+  .sec-h .sec-t{font-size:calc(var(--fs)*1.1);letter-spacing:.18em}
+}

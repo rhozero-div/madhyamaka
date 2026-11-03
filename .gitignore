@@ -15,3 +15,5 @@ tools/
 # 注文与术语的历次备份，不入库
 annotations/_*.json
 glossary/_*.json
+annotations/*.bak*.json
+glossary/*.bak*.json

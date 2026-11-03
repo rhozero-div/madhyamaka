@@ -237,23 +237,79 @@ async function boot() {
 
   await loadTerms();
 
+  // 有目次屏的書，頂欄書名即回首屏（不刷新，只換畫面）
+  const brand = document.querySelector(".top .brand");
+  if (brand && DOC.front) {
+    brand.onclick = e => {
+      e.preventDefault();
+      history.pushState(null, "", location.pathname);
+      renderFront();
+    };
+  }
+
   if (MODE === "short") {
     renderAll();
   } else {
     buildToc();
     const m = location.hash.match(/^#j(\d+)$/);
-    go(m ? +m[1] : 1, true);
+    if (m) go(+m[1], true);
+    else if (DOC.front) renderFront();   // 有目次屏的書（金剛經）：先開目次，不直接進正文
+    else go(1, true);
   }
 }
+
+/* ---------- 目次屏（一書一屏，點分入正文） ----------
+   金剛經三十二分，短者四十餘字，若一進來就落在第一分，讀者不知全經規模；
+   故首屏列三十二分，點一條方入正文。地址留空即此屏，#j5 直達第五分。 */
+const CN = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+
+function cnNum(n) {
+  if (n <= 10) return CN[n];
+  if (n < 20) return "十" + CN[n - 10];
+  if (n === 20) return "二十";
+  if (n < 30) return "二十" + CN[n - 20];
+  return "三" + "十" + (n === 30 ? "" : CN[n - 30]);
+}
+
+function renderFront() {
+  document.body.classList.add("frontview");
+  const js = DOC.blocks.filter(b => b.k === "juan");
+  const wrap = $("#body");
+  const el = document.createElement("div");
+  el.className = "front";
+  // 兩欄按列排：左欄讀完再讀右欄，不按行折（按行折會成一、三、五…）
+  const half = Math.ceil(js.length / 2);
+  const col = arr => '<div class="front-col">' + arr.map(b =>
+    '<a class="front-i" href="#j' + b.n + '" data-j="' + b.n + '">' +
+    "<i>" + cnNum(b.n) + "</i><b>" + esc(b.short || b.label || "") + "</b>" +
+    "<small>" + esc(b.page || "") + "</small></a>"
+  ).join("") + "</div>";
+  el.innerHTML =
+    '<h1 class="front-t">' + esc(DOC.title || "") + "</h1>" +
+    (DOC.author ? '<p class="front-a">' + esc(DOC.author) + "</p>" : "") +
+    '<p class="front-n">' + js.length + " 分　·　點一分即讀一分　·　鍵盤 ← → 可翻" +
+    (DOC.progress ? "　·　" + esc(DOC.progress) : "") + "</p>" +
+    '<div class="front-list">' + col(js.slice(0, half)) + col(js.slice(half)) + "</div>" +
+    '<p class="front-note">分名依通行本，相傳梁昭明太子所分，非經本文；大正藏羅什本無此分。</p>';
+  wrap.innerHTML = "";
+  wrap.appendChild(el);
+  el.querySelectorAll(".front-i").forEach(a => {
+    a.onclick = e => { e.preventDefault(); go(+a.dataset.j, false, true); };
+  });
+  document.querySelectorAll(".toc-j").forEach(a => a.classList.remove("on"));
+  $("#where").innerHTML = esc(DOC.title || "") + " <em>目次</em>";
+  window.scrollTo({ top: 0 });
+}
+
 
 function buildToc() {
   const list = $("#tocList");
   list.innerHTML = "";
   DOC.blocks.filter(b => b.k === "juan").forEach(b => {
     const a = document.createElement("a");
-    a.className = "toc-j"; a.dataset.j = b.n;
+    a.className = "toc-j"; a.dataset.j = b.n; a.href = "#j" + b.n;
     a.innerHTML = esc(b.short || b.label) + "<small>" + b.page + "</small>";
-    a.onclick = () => { go(b.n); $("#toc").classList.remove("on"); };
+    a.onclick = e => { e.preventDefault(); go(b.n, false, true); $("#toc").classList.remove("on"); };
     list.appendChild(a);
   });
   const t = document.querySelector(".toc-t");
@@ -275,12 +331,20 @@ function blocksOf(j) {
 /* ---------- 渲染 ---------- */
 function renderBlocks(frag, blocks) {
   for (const b of blocks) {
-    if (b.k === "p") addPara(frag, b);
+    if (b.k === "p" || b.k === "verse") addPara(frag, b);
     else if (b.k === "juan") {
       const d = document.createElement("div");
-      d.className = "juan-h";
-      d.innerHTML = "<span>" + esc(b.short || b.label) + "</span><span>" +
-        esc(DOC.base || "") + " · " + esc(b.page) + "</span>";
+      if (b.ord) {
+        // 一分一頁之書：分題居中作頁題，短分亦不致空落
+        d.className = "sec-h";
+        d.innerHTML = '<span class="sec-n">' + esc(b.ord) + "</span>" +
+          '<h2 class="sec-t">' + esc(b.short || "") + "</h2>" +
+          '<span class="sec-p">' + esc(DOC.base || "") + " · " + esc(b.page) + "</span>";
+      } else {
+        d.className = "juan-h";
+        d.innerHTML = "<span>" + esc(b.short || b.label) + "</span><span>" +
+          esc(DOC.base || "") + " · " + esc(b.page) + "</span>";
+      }
       frag.appendChild(d);
     } else if (b.k === "head" || b.k === "pin" || b.k === "xu") {
       const d = document.createElement("div");
@@ -300,17 +364,40 @@ function renderBlocks(frag, blocks) {
   }
 }
 
-function go(j, silent) {
+function go(j, silent, push) {
   JUAN = j;
+  document.body.classList.remove("frontview");
   document.querySelectorAll(".toc-j").forEach(a => a.classList.toggle("on", +a.dataset.j === j));
   const wrap = $("#body");
   const frag = document.createDocumentFragment();
   renderBlocks(frag, blocksOf(j));
   wrap.innerHTML = "";
   wrap.appendChild(frag);
+  const nav = pnav(j);
+  if (nav) wrap.appendChild(nav);
   updateWhere();
   if (!silent) window.scrollTo({ top: 0, behavior: "smooth" });
-  history.replaceState(null, "", "#j" + j);
+  if (push) history.pushState({ j: j }, "", "#j" + j);
+  else history.replaceState(null, "", "#j" + j);
+}
+
+/* 頁末翻分：一份讀完，下一份就手，不必回頭拉目次 */
+function pnav(j) {
+  const js = DOC.blocks.filter(b => b.k === "juan");
+  const i = js.findIndex(b => b.n === j);
+  if (i < 0) return null;
+  const d = document.createElement("div");
+  d.className = "pnav";
+  const prev = js[i - 1], next = js[i + 1];
+  const u = DOC.unit || "卷";   // 金剛經作「分」，論疏作「卷」
+  d.innerHTML =
+    (prev ? '<a class="pn-a" data-j="' + prev.n + '" href="#j' + prev.n + '">← ' + esc(prev.short) + "</a>"
+          : '<span class="pn-x"></span>') +
+    '<span class="pn-c">第' + cnNum(j) + u + "　共" + cnNum(js.length) + u + "</span>" +
+    (next ? '<a class="pn-a pn-r" data-j="' + next.n + '" href="#j' + next.n + '">' + esc(next.short) + " →</a>"
+          : '<span class="pn-x"></span>');
+  d.querySelectorAll("a").forEach(a => a.onclick = e => { e.preventDefault(); go(+a.dataset.j); });
+  return d;
 }
 
 function renderAll(silent) {
@@ -368,7 +455,7 @@ function addPara(frag, p) {
     html += tail;
 
     const el = document.createElement("p");
-    el.className = "unit" + (p.dh ? " dh" : "");
+    el.className = "unit" + (p.dh ? " dh" : "") + (p.k === "verse" ? " verse" : "");
     el.dataset.pid = p.id; el.dataset.start = a; el.dataset.end = b;
     el.innerHTML = html;
     frag.appendChild(el);
@@ -743,9 +830,26 @@ addEventListener("scroll", () => {
 
 addEventListener("keydown", e => {
   if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT" || MODE === "short" || !DOC) return;
+  if (document.body.classList.contains("frontview")) return;
   const js = DOC.blocks.filter(b => b.k === "juan");
   if (e.key === "ArrowRight" && JUAN < js.length) go(JUAN + 1);
   if (e.key === "ArrowLeft" && JUAN > 1) go(JUAN - 1);
+});
+
+/* 目次屏與正文之間的前進後退：地址無 hash 即目次 */
+addEventListener("popstate", () => {
+  if (!DOC) return;
+  const m = location.hash.match(/^#j(\d+)$/);
+  if (m) go(+m[1], true);
+  else if (DOC.front) renderFront();
+});
+
+/* 直接改 hash（貼網址、外部連結）不一定發 popstate，補一道 */
+addEventListener("hashchange", () => {
+  if (!DOC) return;
+  const m = location.hash.match(/^#j(\d+)$/);
+  if (m) { if (+m[1] !== JUAN) go(+m[1], true); }
+  else if (DOC.front && !document.body.classList.contains("frontview")) renderFront();
 });
 
 boot();
