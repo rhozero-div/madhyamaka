@@ -130,12 +130,22 @@ function termize(text, seen) {
   }
   out += text.slice(last);
 
+  // 短詞不得落在長詞之中：「須菩提」裡的「菩提」、「三藐三菩提」裡的「菩提」皆不鏈
+  const occAll = [];
+  for (const t of AUTO) for (const c of [t.k].concat(t.aka)) {
+    let i = out.indexOf(c);
+    while (i >= 0) { occAll.push({ a: i, b: i + c.length, len: c.length }); i = out.indexOf(c, i + 1); }
+  }
+  const insideLonger = (i, len) =>
+    occAll.some(o => o.len > len && o.a <= i && i + len <= o.b);
+
   for (const t of AUTO) {
     if (seen && seen.has(t.k)) continue;
     if (spans.some(s => s.key === t.k)) continue;
     let hit = -1, len = 0;
     for (const c of [t.k].concat(t.aka)) {
-      const i = out.indexOf(c);
+      let i = out.indexOf(c);
+      while (i >= 0 && insideLonger(i, c.length)) i = out.indexOf(c, i + 1);
       if (i >= 0 && (hit < 0 || i < hit)) { hit = i; len = c.length; }
     }
     if (hit < 0) continue;
