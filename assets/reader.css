@@ -399,10 +399,7 @@ body.frontview #body{max-width:760px}
   border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);
   transition:background .16s;
 }
-.front-i i{
-  font-family:var(--sans);font-style:normal;font-size:11px;
-  color:var(--ink-3);min-width:3.4em;letter-spacing:.04em;
-}
+.sec-t .sec-o{margin-left:.55em;font-family:var(--sans);font-size:.6em;letter-spacing:.12em;color:var(--ink-3)}
 .front-i b{font-weight:400;font-size:calc(var(--fs)*.93);letter-spacing:.14em;flex:1}
 .front-i small{font-family:var(--sans);font-size:10.5px;color:var(--ink-3);letter-spacing:.04em}
 .front-i:hover{background:rgba(156,58,48,.04)}

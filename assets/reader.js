@@ -291,7 +291,7 @@ function renderFront() {
   const half = Math.ceil(js.length / 2);
   const col = arr => '<div class="front-col">' + arr.map(b =>
     '<a class="front-i" href="#j' + b.n + '" data-j="' + b.n + '">' +
-    "<i>" + cnNum(b.n) + "</i><b>" + esc(b.short || b.label || "") + "</b>" +
+    "<b>" + esc(b.short || b.label || "") + esc(b.ord || "") + "</b>" +
     "<small>" + esc(b.page || "") + "</small></a>"
   ).join("") + "</div>";
   el.innerHTML =
@@ -318,7 +318,7 @@ function buildToc() {
   DOC.blocks.filter(b => b.k === "juan").forEach(b => {
     const a = document.createElement("a");
     a.className = "toc-j"; a.dataset.j = b.n; a.href = "#j" + b.n;
-    a.innerHTML = esc(b.short || b.label) + "<small>" + b.page + "</small>";
+    a.innerHTML = esc(b.short || b.label) + esc(b.ord || "") + "<small>" + b.page + "</small>";
     a.onclick = e => { e.preventDefault(); go(b.n, false, true); $("#toc").classList.remove("on"); };
     list.appendChild(a);
   });
@@ -347,8 +347,8 @@ function renderBlocks(frag, blocks) {
       if (b.ord) {
         // 一分一頁之書：分題居中作頁題，短分亦不致空落
         d.className = "sec-h";
-        d.innerHTML = '<span class="sec-n">' + esc(b.ord) + "</span>" +
-          '<h2 class="sec-t">' + esc(b.short || "") + "</h2>" +
+        d.innerHTML = '<h2 class="sec-t">' + esc(b.short || "") +
+          '<span class="sec-o">' + esc(b.ord) + "</span></h2>" +
           '<span class="sec-p">' + esc(DOC.base || "") + " · " + esc(b.page) + "</span>";
       } else {
         d.className = "juan-h";
