@@ -65,10 +65,11 @@
 
 | 项 | 内容 |
 | --- | --- |
-| 书名 | 《心經》《金剛經》中觀註釋（Kindle 商店标作 `(Annotated)`） |
+| 书名 | 《心經》《金剛經》中觀註釋（Traditional Chinese Edition） |
 | 注者 | 關河舊人 |
 | 平台 | Amazon Kindle 商店（繁中电子书，横排） |
 | 内容 | 《心经》四十六注、《金刚经》三十二分一百三十五注，另附序、凡例与术语表 |
+| 商店 | <https://www.amazon.com/dp/B0HR4S1T4S>（ASIN B0HR4S1T4S） |
 
 其余经论的注释尚未成书。
 
