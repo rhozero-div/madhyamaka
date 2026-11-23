@@ -40,7 +40,7 @@ let JUAN = 1, LIVE = true, FS = +(localStorage.getItem("nz_fs") || 18);
 // 靜態託管（GitHub Pages）沒有 api/*，此時 LIVE=false、READONLY=true：
 // 注文改讀 annotations/<id>.json，頁面只供閱讀，不給加注、改注、刪注的入口。
 let READONLY = false;
-let editing = null, pending = null;
+let editing = null, pending = null, REANCHOR = null;
 
 function toast(msg) {
   const t = $("#toast"); t.textContent = msg; t.classList.add("on");
@@ -690,6 +690,23 @@ document.addEventListener("click", e => {
   if (!e.target.closest(".tip")) $("#tip").style.display = "none";
 });
 
+/* 把選區換成錨點：只認同一 .unit 內、非空的選取 */
+function rangeAnchor(r) {
+  if (!r) return null;
+  const u1 = (r.startContainer.nodeType === 3 ? r.startContainer.parentElement : r.startContainer).closest(".unit");
+  const u2 = (r.endContainer.nodeType === 3 ? r.endContainer.parentElement : r.endContainer).closest(".unit");
+  if (!u1 || u1 !== u2) return null;
+  const pre = document.createRange();
+  pre.setStart(u1, 0);
+  pre.setEnd(r.startContainer, r.startOffset);
+  const raw = r.toString();
+  const lead = raw.length - raw.replace(/^\s+/, "").length;   // 去掉選區前端空白，錨點才準
+  const quote = raw.trim();
+  if (!quote) return null;
+  const offset = +u1.dataset.start + pre.toString().length + lead;
+  return { para: u1.dataset.pid, offset, end: offset + quote.length, quote };
+}
+
 /* ---------- 選注 ---------- */
 document.addEventListener("mouseup", e => {
   if (READONLY) return;
@@ -698,6 +715,17 @@ document.addEventListener("mouseup", e => {
     const sel = getSelection();
     if (!sel || sel.isCollapsed || !sel.toString().trim()) { $("#tip").style.display = "none"; return; }
     const r = sel.getRangeAt(0);
+    // 改錨點：拖選後直接以新選區重開該注，不必再點「加注」
+    if (REANCHOR) {
+      const a = rangeAnchor(r);
+      $("#tip").style.display = "none";
+      if (!a) { toast("請在同一段內選取"); return; }
+      const base = REANCHOR; REANCHOR = null;
+      openEditor(Object.assign({}, base, a), null);
+      editing.anchorChanged = true;
+      sel.removeAllRanges();
+      return;
+    }
     const u1 = (r.startContainer.nodeType === 3 ? r.startContainer.parentElement : r.startContainer).closest(".unit");
     const u2 = (r.endContainer.nodeType === 3 ? r.endContainer.parentElement : r.endContainer).closest(".unit");
     if (!u1 || u1 !== u2) { $("#tip").style.display = "none"; return; }
@@ -712,18 +740,10 @@ document.addEventListener("mouseup", e => {
 
 $("#tip").onclick = () => {
   if (!pending) return;
-  const r = pending;
-  const u = (r.startContainer.nodeType === 3 ? r.startContainer.parentElement : r.startContainer).closest(".unit");
-  const pre = document.createRange();
-  pre.setStart(u, 0);
-  pre.setEnd(r.startContainer, r.startOffset);
-  const raw = getSelection().toString();
-  const lead = raw.length - raw.replace(/^\s+/, "").length;   // 去掉選區前端空白，錨點才準
-  const quote = raw.trim();
-  const offset = +u.dataset.start + pre.toString().length + lead;
+  const a = rangeAnchor(pending);
   $("#tip").style.display = "none";
-  if (!quote) return;
-  openEditor({ id: null, para: u.dataset.pid, offset, end: offset + quote.length, quote }, null);
+  if (!a) return;
+  openEditor(Object.assign({ id: null }, a), null);
 };
 
 /* ---------- 編輯器（三欄：原義 / 觀義 / 串講，另附所引） ---------- */
@@ -789,6 +809,21 @@ function openEditor(n, ntEl) {
       ? "原文：" + esc(n.quote.slice(0, 80)) + (n.quote.length > 80 ? "…" : "")
       : "句末串講：不引原文，只通釋這一句";
 
+  const oldRa = $("#edReanchor"); if (oldRa) oldRa.remove();
+  if (n.id) {
+    const b = document.createElement("button");
+    b.id = "edReanchor"; b.type = "button"; b.className = "ed-reanchor";
+    b.textContent = "重選原文";
+    b.onclick = () => {
+      if (!editing || !editing.note.id) return;
+      REANCHOR = editing.note;
+      $("#editor").classList.remove("on");
+      editing = null;
+      toast("在正文中拖選新的詞句，放開即改");
+    };
+    $("#edQuote").after(b);
+  }
+
   const parts = Array.isArray(n.parts) ? n.parts : [];
   const get = k => { const p = parts.find(x => x && kn(x.k) === k); return p && p.t ? p.t : ""; };
   ED_IDS.forEach((sel, i) => { $(sel).value = SLOTS[i] ? get(SLOTS[i]) : ""; });
@@ -811,7 +846,7 @@ function openEditor(n, ntEl) {
 
 function closeEditor() {
   $("#editor").classList.remove("on");
-  editing = null; pending = null;
+  editing = null; pending = null; REANCHOR = null;
 }
 
 $("#edCancel").onclick = closeEditor;
@@ -860,6 +895,9 @@ async function saveNote() {
   if (n.id) {
     const old = NOTES.find(x => x.id === n.id) || n;
     let upd = Object.assign({}, old, { parts, src, ts: new Date().toISOString() });
+    if (editing.anchorChanged) {   // 重選過原文：錨點一併寫回
+      upd.para = n.para; upd.offset = n.offset; upd.end = n.end; upd.quote = n.quote;
+    }
     if (keep) upd.note = keep; else delete upd.note;
     if (LIVE) {
       const r = await post({ op: "update", t: TEXT, note: upd });
@@ -963,6 +1001,7 @@ addEventListener("scroll", () => {
 }, { passive: true });
 
 addEventListener("keydown", e => {
+  if (REANCHOR && e.key === "Escape") { REANCHOR = null; toast("已取消重選"); return; }
   if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT" || MODE === "short" || !DOC) return;
   if (document.body.classList.contains("frontview")) return;
   if (e.key === "ArrowRight" && PAGE < PAGES.length) go(PAGE + 1);

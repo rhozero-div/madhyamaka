@@ -210,6 +210,13 @@ body.ro #tip{pointer-events:none}
   max-height:3.6em;overflow:hidden;
 }
 .ed-quote b{color:var(--red);font-weight:400}
+/* 改錨點：重選被注的那幾個字 */
+.ed-reanchor{
+  font-family:var(--sans);font-size:11px;letter-spacing:.08em;cursor:pointer;
+  margin:-2px 0 12px;padding:3px 10px;border-radius:3px;
+  color:var(--red);background:transparent;border:1px solid rgba(156,58,48,.28);
+}
+.ed-reanchor:hover{background:rgba(156,58,48,.06)}
 
 /* 三欄式：原義 / 觀義 / 串講 / 所引 */
 .ed-fields{display:flex;flex-direction:column;gap:7px}
