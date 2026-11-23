@@ -13,7 +13,7 @@
 | 层级 | 页面 | 作用 |
 | --- | --- | --- |
 | 一级 | `index.html` | 中观学综述：义理、年表、印度／中国／日本、经论目录 |
-| 一级 | `books.html` | 佛学书单：二十五种，按部类分组，记已读未读；书目、版次、按语皆本页自记，不引外站。按「編輯」就地增删改，落盘 `books.json`（`serve.py` 提供 `/api/books` 读写；静态托管时退回浏览器本地并提示导出）。保存不转繁简，由作者自书；需要时跑 `python3 tools/to_trad.py --apply`，`books.html` 与 `books.json` 均已纳入该检查 |
+| 一级 | `books.html` | 佛学书单：二十九种，按部类分组，记已读未读；书目、版次、按语皆本页自记，不引外站。本机版按「編輯」就地增删改，落盘 `books.json`（`serve.py` 提供 `/api/books` 读写）；**线上静态版只读**，不显编辑入口、不写浏览器暂存。保存不转繁简，由作者自书；需要时跑 `python3 tools/to_trad.py --apply`，`books.html` 与 `books.json` 均已纳入该检查 |
 | 二级 | `reading.html` | 阅读目录，列出可读的经论 |
 | 二级 | `zhongguanlunshu_jiqiao.html` | 机巧抄：《中观论疏》随得随录，先止一则（中／观／论配三般若），日后续增；入口在《中观论疏》阅读页 `T42n1824.html` 顶栏，不从全站导航进入 |
 | 三级 | `T08n0251.html`、`T08n0235.html`、`T42n1824.html`、`glossary.html` | 单部经论的阅读与注释，**文件名即大正藏号**（T08 no. 251《心经》、T08 no. 235《金刚经》、T42 no. 1824《中观论疏》），与 `text/`、`annotations/` 下的同名 JSON 一一对应；`glossary.html` 为注文中可点之词的释义表 |
@@ -54,6 +54,7 @@
 
 - <https://rhozero-div.github.io/madhyamaka/> —— 综述首页
 - <https://rhozero-div.github.io/madhyamaka/reading.html> —— 阅读目录
+- <https://rhozero-div.github.io/madhyamaka/books.html> —— 佛学书单（只读）
 - <https://rhozero-div.github.io/madhyamaka/T08n0251.html> —— 《心经》白文与注
 - <https://rhozero-div.github.io/madhyamaka/glossary.html> —— 术语表
 - <https://rhozero-div.github.io/madhyamaka/T42n1824.html> —— 《中观论疏》分段全文与注（随注随上）

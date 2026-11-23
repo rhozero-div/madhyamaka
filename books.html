@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>書單 · 佛學書單與已讀</title>
+<script>
+/* 線上只讀：靜態託管沒有 /api，也不給編輯入口 */
+(function () {
+  var local = location.protocol === "file:" ||
+    /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+  document.documentElement.dataset.env = local ? "local" : "web";
+})();
+</script>
+<link rel="stylesheet" href="assets/reader.css?v=26">
+<style>
+.bl{padding:56px 22px 120px}
+.bl-wrap{max-width:760px;margin:0 auto}
+.bl-kicker{font-family:var(--sans);font-size:10.5px;letter-spacing:.34em;color:var(--gold);margin:0 0 16px}
+.bl-h1{font-size:34px;font-weight:600;letter-spacing:.2em;margin:0 0 14px}
+.bl-sub{font-size:14.5px;line-height:2.05;color:var(--ink-2);margin:0 0 26px;letter-spacing:.02em;max-width:620px}
+
+.bl-stats{display:flex;gap:34px;flex-wrap:wrap;margin:0 0 22px;padding:16px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+.bl-stats div{font-family:var(--sans);font-size:11.5px;letter-spacing:.1em;color:var(--ink-3)}
+.bl-stats b{display:block;font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:.02em;color:var(--ink);margin-bottom:4px}
+.bl-stats b.read{color:var(--red)}
+
+.bl-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 6px}
+.bl-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-right:auto}
+.bl-tab{
+  font-family:var(--sans);font-size:12px;letter-spacing:.08em;color:var(--ink-2);
+  background:transparent;border:1px solid var(--line);border-radius:20px;
+  padding:6px 14px;cursor:pointer;transition:.18s;
+}
+.bl-tab:hover{background:rgba(33,30,25,.04)}
+.bl-tab[aria-pressed="true"]{color:var(--red);border-color:rgba(156,58,48,.35);background:rgba(156,58,48,.06)}
+.bl-tab i{font-style:normal;color:var(--ink-3);margin-left:4px}
+
+.bl-edit{
+  font-family:var(--sans);font-size:12px;letter-spacing:.12em;color:var(--ink-2);
+  background:transparent;border:1px solid var(--line);border-radius:2px;
+  padding:6px 13px;cursor:pointer;transition:.18s;
+}
+.bl-edit:hover{border-color:var(--ink-3);color:var(--ink)}
+.bl-edit[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* 線上只讀：隱去編輯入口與本機暫存相關提示 */
+html[data-env="web"] [data-local]{display:none!important}
+html[data-env="local"] [data-web]{display:none!important}
+
+.bl-save{font-family:var(--sans);font-size:11px;letter-spacing:.06em;color:var(--ink-3);
+  margin:0 0 22px;min-height:1.5em}
+.bl-save.err{color:var(--red)}
+
+/* 本機模式提示：一直掛在頂上，不必點進編輯才看得見 */
+.mode{margin:0 0 20px;padding:9px 12px;font-family:var(--sans);font-size:11.5px;line-height:1.8;
+  letter-spacing:.04em;color:#7a4a12;background:rgba(176,132,58,.09);
+  border-left:3px solid rgba(176,132,48,.55)}
+.mode[hidden]{display:none}
+
+/* 本機暫存與檔案不一致時的處置欄 */
+.cf{margin:0 0 22px;padding:13px 15px;border:1px solid rgba(156,58,48,.28);
+  border-left:3px solid rgba(156,58,48,.55);background:rgba(156,58,48,.045);
+  font-size:12.5px;line-height:1.95;color:var(--ink-2);letter-spacing:.01em}
+.cf[hidden]{display:none}
+.cf b{color:var(--red);font-weight:600}
+.cf .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.cf .hint{margin-top:7px;font-size:11.5px;color:var(--ink-3)}
+.cf button{font-family:var(--sans);font-size:11.5px;letter-spacing:.06em;color:var(--ink-2);
+  background:transparent;border:1px solid var(--line);border-radius:2px;padding:5px 11px;cursor:pointer}
+.cf button:hover{border-color:rgba(156,58,48,.5);color:var(--red)}
+.cf button.pri{background:var(--red);border-color:var(--red);color:#fdf9f2}
+.cf button.pri:hover{color:#fdf9f2;opacity:.9}
+.cf button:disabled{opacity:.4;cursor:not-allowed;border-color:var(--line);color:var(--ink-3)}
+
+.grp{margin:0 0 34px}
+.grp-h{display:flex;align-items:baseline;gap:12px;margin:0 0 10px;padding-bottom:7px;border-bottom:1px solid var(--line-2)}
+.grp-h h2{font-size:15px;font-weight:600;letter-spacing:.16em;margin:0}
+.grp-h span{font-family:var(--sans);font-size:10.5px;letter-spacing:.1em;color:var(--gold)}
+.grp-n{font-family:var(--sans);font-size:10.5px;letter-spacing:.05em;color:var(--ink-3);
+  line-height:1.75;margin:-2px 0 13px}
+.grp-h .add{
+  margin-left:auto;font-family:var(--sans);font-size:10.5px;letter-spacing:.1em;
+  color:var(--ink-3);background:transparent;border:1px dashed var(--line);
+  border-radius:2px;padding:3px 9px;cursor:pointer;transition:.18s;
+}
+.grp-h .add:hover{color:var(--red);border-color:rgba(156,58,48,.4)}
+
+/* 一條一行：序、書名（serif）與著錄（sans）同列，右端朱印 */
+.bk{display:grid;grid-template-columns:26px minmax(0,1fr) auto;column-gap:14px;
+    align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line-2)}
+.bk:last-child{border-bottom:0}
+.bk-no{font-family:var(--sans);font-size:10.5px;color:var(--gold);letter-spacing:.06em}
+.bk-main{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;min-width:0}
+.bk-t{font-size:17px;font-weight:600;letter-spacing:.04em;line-height:1.55;margin:0}
+.bk-m{font-family:var(--sans);font-size:11.5px;letter-spacing:.05em;color:var(--ink-3);line-height:1.7;margin:0}
+.bk-m .todo{border-bottom:1px dotted rgba(33,30,25,.28);padding-bottom:1px;opacity:.72}
+.bk-n{grid-column:2/-1;font-size:13px;line-height:1.9;color:var(--ink-2);margin:3px 0 0;letter-spacing:.01em}
+.bk-r{text-align:right;white-space:nowrap}
+.bk-r .stamp{display:inline-block;font-family:var(--serif);font-size:11px;letter-spacing:.14em;
+  color:var(--red);border:1px solid rgba(156,58,48,.45);border-radius:2px;padding:1px 5px 1px 6px;vertical-align:1px}
+.bk[data-read="0"] .bk-r .stamp{display:none}
+
+/* 編輯態 */
+.bk-r button.rd{
+  font-family:var(--serif);font-size:11px;letter-spacing:.14em;background:transparent;
+  border:1px solid var(--line);border-radius:2px;padding:1px 5px 1px 6px;cursor:pointer;
+  color:var(--ink-3);transition:.15s;
+}
+.bk-r button.rd:hover{border-color:rgba(156,58,48,.45);color:var(--red)}
+.bk-r button.rd[aria-pressed="true"]{color:var(--red);border-color:rgba(156,58,48,.45);background:rgba(156,58,48,.06)}
+
+.bk-in{
+  font-family:var(--sans);font-size:11.5px;letter-spacing:.05em;color:var(--ink-2);
+  background:transparent;border:0;border-bottom:1px solid rgba(33,30,25,.14);
+  padding:2px 1px;min-width:0;border-radius:0;
+}
+.bk-in::placeholder{color:rgba(33,30,25,.26)}
+.bk-in:hover{border-bottom-color:rgba(33,30,25,.3)}
+.bk-in:focus{outline:0;border-bottom-color:var(--red)}
+.in-t{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:.04em;color:var(--ink);
+  flex:1 1 10em;min-width:7em}
+.in-a{flex:0 1 7.5em;width:7.5em}
+.in-p{flex:0 1 9em;width:9em}
+.in-y{flex:0 1 4.5em;width:4.5em}
+.bk-nrow{grid-column:2/-1;display:flex;align-items:baseline;gap:10px;margin:3px 0 0}
+.in-n{flex:1;font-size:13px;color:var(--ink-2);border-bottom-color:rgba(33,30,25,.1)}
+.in-g{flex:0 0 6.5em;width:6.5em;font-size:11px;letter-spacing:.06em;color:var(--ink-3);border-bottom-color:rgba(33,30,25,.1);cursor:pointer}
+.del{font-family:var(--sans);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);
+  background:transparent;border:0;cursor:pointer;padding:2px 0;flex:0 0 auto}
+.del:hover{color:var(--red)}
+
+.bl-note{margin:44px 0 0;padding:14px 16px;border-left:2px solid rgba(156,58,48,.18);
+  font-size:12.5px;line-height:1.95;color:var(--ink-3);letter-spacing:.01em}
+.bl-back{margin-top:34px;font-family:var(--sans);font-size:12px;letter-spacing:.1em;color:var(--ink-3)}
+.bl-back a{color:var(--ink-3)}.bl-back a:hover{color:var(--red)}
+.bl-back .lnk{background:none;border:0;font:inherit;color:var(--ink-3);cursor:pointer;padding:0}
+.bl-back .lnk:hover{color:var(--red)}
+.empty{padding:40px 0;text-align:center;font-size:13.5px;color:var(--ink-3)}
+
+@media (max-width:760px){
+  .bl{padding:36px 16px 90px}
+  .bl-h1{font-size:27px}
+  .bl-stats{gap:22px}
+  .bk{grid-template-columns:20px minmax(0,1fr) auto;column-gap:10px}
+  .bk-main{gap:0 10px}
+  .bk-t{font-size:16px}
+  .in-a{flex:1 1 6em;width:auto}
+  .in-p{flex:1 1 8em;width:auto}
+  .in-y{flex:0 0 4em;width:4em}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="index.html"><span class="seal">觀</span><b>中觀學</b></a>
+  <nav class="crumb"><i>›</i><span>書單</span></nav>
+  <div class="where"></div>
+  <div class="tools"><a href="reading.html">閱讀</a><a href="index.html">首頁</a></div>
+</header>
+
+<main class="bl"><div class="bl-wrap">
+
+  <p class="bl-kicker">Reading List</p>
+  <h1 class="bl-h1">佛學書單</h1>
+  <p class="bl-sub">
+    二十餘種，從《雜阿含》到《明句論》，依文獻性質分作五部：先經，次論，次漢地撰述，旁及近現代研究與教史。經、論各附其注疏，不別出。
+    讀過者加朱印。書目、版次與讀記皆錄在這一頁，不依外間榜單，也不鏈去別處。
+  </p>
+
+  <div class="bl-stats">
+    <div><b id="n-all">0</b>種</div>
+    <div><b id="n-read" class="read">0</b>讀過</div>
+    <div><b id="n-left">0</b>未讀</div>
+  </div>
+
+  <div class="bl-bar">
+    <div class="bl-tabs" role="group" aria-label="篩選">
+      <button class="bl-tab" data-f="all" aria-pressed="true">全部<i id="c-all">0</i></button>
+      <button class="bl-tab" data-f="read" aria-pressed="false">讀過<i id="c-read">0</i></button>
+      <button class="bl-tab" data-f="unread" aria-pressed="false">未讀<i id="c-unread">0</i></button>
+    </div>
+    <button id="btn-edit" class="bl-edit" aria-pressed="false">編輯</button>
+  </div>
+  <p class="bl-save" id="save" aria-live="polite"></p>
+  <div class="mode" id="modebar" hidden></div>
+  <div class="cf" id="conflict" hidden></div>
+
+  <div id="list"></div>
+
+  <p class="bl-note" data-local>
+    按「編輯」即可增刪改錄，改一筆存一筆，不必另按保存。書名、撰者、版次止記手邊這一版；
+    有未及核者留空，頁上自記「版次待補」，不借外間著錄。
+    撰者一欄兼記前人與今人，作「【朝代】作者 角色／今人 角色」，如「【後秦】僧肇 述／王孺童 校補」。
+  </p>
+  <p class="bl-note" data-web>
+    此為線上只讀本：書目、版次與讀記依 <code>books.json</code> 呈現，不提供增刪改；
+    編輯入口只在本機版出現。
+  </p>
+
+  <p class="bl-back"><a href="reading.html">← 回閱讀</a>　·　<a href="index.html">回首頁</a>
+    　·　<span class="lnk" id="bl-export" hidden>匯出 books.json</span></p>
+
+</div></main>
+
+<script>
+const ORDER = ["經部", "論典", "漢地佛教", "近現代研究", "教史"];
+/* 每組一句收錄範圍，免得日後又問「這本為什麼在這裏」 */
+const GNOTE = {
+  "經部": "佛所說經，兼收對經的注釋、講記、校補；依所釋之經歸類，不論注者古今。",
+  "論典": "印度、藏地論典及漢地注疏：龍樹、提婆、月稱之論，宗喀巴《廣論》，吉藏之疏與宗義。",
+  "漢地佛教": "漢地撰述之論著，非譯籍。",
+  "近現代研究": "今人及近代中外學者對中觀、肇論、因明之研究；含導讀、講記、譯注。",
+  "教史": "印度與中國佛教史，通史與斷代。"
+};
+const LOCAL_KEY = "books.local";
+const STATIC_HOST = !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+const esc = s => (s || "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let books = [];        // 工作副本，改動即存
+let filter = "all";
+let editing = false;
+let mode = "server";   // server 可落盤；static 只能存本機
+let timer = null;
+let pendingLocal = null;  // 本機暫存與檔案不一致時暫放，待用戶處置
+
+/* 一條書目只有這七個字段，比對時一律先過一遍，免得形狀不同誤判 */
+const FIELDS = ["g", "t", "a", "p", "y", "read", "note"];
+function pick(b){
+  const o = {};
+  FIELDS.forEach(k => { o[k] = k === "read" ? !!b.read : (b[k] || ""); });
+  return o;
+}
+function sameList(x, y){
+  if (!Array.isArray(x) || !Array.isArray(y) || x.length !== y.length) return false;
+  for (let i = 0; i < x.length; i++){
+    const a = pick(x[i]), b = pick(y[i]);
+    for (const k of FIELDS) if (String(a[k]) !== String(b[k])) return false;
+  }
+  return true;
+}
+function diffCount(x, y){
+  let n = 0;
+  for (let i = 0; i < Math.max(x.length, y.length); i++){
+    const a = x[i] && pick(x[i]), b = y[i] && pick(y[i]);
+    if (!a || !b){ n++; continue; }
+    if (FIELDS.some(k => String(a[k]) !== String(b[k]))) n++;
+  }
+  return n;
+}
+
+/* ---------- 存 ---------- */
+function say(msg, bad){
+  const el = document.getElementById("save");
+  el.textContent = msg || "";
+  el.className = "bl-save" + (bad ? " err" : "");
+}
+
+function modebar(msg){
+  const el = document.getElementById("modebar");
+  if (!msg){ el.hidden = true; el.textContent = ""; return; }
+  el.hidden = false;
+  el.textContent = msg;
+}
+
+function hhmm(){
+  const d = new Date(), p = n => String(n).padStart(2, "0");
+  return p(d.getHours()) + ":" + p(d.getMinutes());
+}
+
+/* 本機暫存一律連時間一起存，日後對不上才有個先後可說 */
+function saveLocal(){
+  try{ localStorage.setItem(LOCAL_KEY, JSON.stringify({ts: Date.now(), books})); }
+  catch(e){ say("本機暫存寫不進去：" + e.message, true); }
+}
+
+async function flush(){
+  if (STATIC_HOST) return;   // 線上唯讀，誰也寫不進來
+  if (mode === "server"){
+    try{
+      const r = await fetch("/api/books", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({books})
+      });
+      if (r.ok){
+        // 已落盤，本機暫存便是多餘的；留着反而會在日後遮蔽檔案
+        try{ localStorage.removeItem(LOCAL_KEY); }catch(e){}
+        say("已存 · " + hhmm()); return;
+      }
+    }catch(e){ /* 落到本機 */ }
+    mode = "static";
+    modebar("本機模式：改動只存在這一個瀏覽器，不會寫入檔案。要落盤請重啟 serve.py，再刷新本頁。");
+  }
+  saveLocal();
+  say("已存於本機瀏覽器（未連本地服務，可匯出）");
+}
+
+function touch(){
+  clearTimeout(timer);
+  say("存中…");
+  timer = setTimeout(flush, 500);
+}
+
+/* ---------- 讀 ---------- */
+async function getJSON(url){
+  try{
+    const r = await fetch(url, {cache: "no-store"});
+    if (!r.ok) return null;
+    const ct = r.headers.get("Content-Type") || "";
+    if (!ct.includes("json")) return null;
+    return await r.json();
+  }catch(e){ return null; }
+}
+
+function readLocal(){
+  try{
+    const v = JSON.parse(localStorage.getItem(LOCAL_KEY) || "null");
+    if (Array.isArray(v)) return {ts: 0, books: v};            // 舊格式：純陣列
+    if (v && Array.isArray(v.books)) return v;
+  }catch(e){}
+  return null;
+}
+
+function dropLocal(){
+  try{ localStorage.removeItem(LOCAL_KEY); }catch(e){}
+  pendingLocal = null;
+  document.getElementById("conflict").hidden = true;
+  document.getElementById("btn-edit").disabled = false;
+}
+
+function showConflict(local, src){
+  const n = diffCount(local.books, src);
+  const d = local.ts ? new Date(local.ts) : null;
+  const when = d
+    ? (d.getMonth() + 1) + "月" + d.getDate() + "日 " +
+      String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0")
+    : "時間不詳";
+  const el = document.getElementById("conflict");
+  el.hidden = false;
+  el.innerHTML =
+    "<b>本機另有一份暫存</b>，與檔案有 " + n + " 條不同（本機那份存於 " + when + "）。" +
+    "兩份都還在，頁上先照檔案顯示；請擇一處置，處置之前不許改——否則一存就把另一份蓋掉。" +
+    '<div class="row">' +
+      '<button id="cf-use-file" class="pri">以檔案為準</button>' +
+      '<button id="cf-use-local">以本機為準</button>' +
+      '<button id="cf-export">匯出本機那份</button>' +
+    "</div>" +
+    (mode === "server" ? "" :
+      '<div class="hint">現在沒連上本地服務，「以本機為準」寫不進檔案。要保住本機那份，先「匯出本機那份」。</div>');
+
+  document.getElementById("btn-edit").disabled = true;
+  document.getElementById("cf-use-file").addEventListener("click", () => {
+    if (!confirm("以檔案為準，本機那份暫存將刪去。若還想留着，先按「匯出本機那份」。")) return;
+    dropLocal();
+    say("已用檔案，本機暫存已刪");
+  });
+  document.getElementById("cf-export").addEventListener("click", () => {
+    download(pendingLocal.books, "books.local.json");
+  });
+  document.getElementById("cf-use-local").addEventListener("click", async () => {
+    if (mode !== "server"){
+      say("未連本地服務，寫不進檔案：請重啟 serve.py 後刷新，或先匯出", true);
+      return;
+    }
+    const btn = document.getElementById("cf-use-local");
+    btn.disabled = true; btn.textContent = "寫入中…";
+    try{
+      const r = await fetch("/api/books", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({books: pendingLocal.books})
+      });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      books = pendingLocal.books;
+      dropLocal();
+      stats(); render();
+      say("已把本機那份寫入檔案 · " + hhmm());
+    }catch(e){
+      btn.disabled = false; btn.textContent = "以本機為準";
+      say("寫不進去：" + e.message, true);
+    }
+  });
+}
+
+function download(list, name){
+  const blob = new Blob([JSON.stringify({version: 1, books: list}, null, 1)],
+                        {type: "application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+async function boot(){
+  const fromApi = await getJSON("/api/books");
+  let src = null;
+  if (fromApi && Array.isArray(fromApi.books)){ src = fromApi.books; mode = "server"; }
+  else {
+    const fromFile = await getJSON("books.json");
+    if (fromFile && Array.isArray(fromFile.books)){ src = fromFile.books; mode = "static"; }
+  }
+  const local = STATIC_HOST ? null : readLocal();
+
+  if (src && src.length){
+    books = src;
+    // 以前這裡是本機暫存直接蓋過檔案，於是刷了頁還是舊的，改的也只在瀏覽器裏。
+    // 現在一律以檔案為底，兩份不同則掛出來問，不擅自取捨。
+    if (local && local.books.length && !sameList(local.books, src)){
+      pendingLocal = local;
+      showConflict(local, src);
+    } else if (local){
+      dropLocal();          // 兩份一致，本機那份沒有用處
+    }
+  } else if (local && local.books.length){
+    books = local.books; mode = "static";
+    say("讀不到 books.json，暫用本機暫存", true);
+  } else {
+    document.getElementById("list").innerHTML =
+      '<p class="empty">讀不到書單：books.json 不在位，本地服務也沒開。</p>';
+    say("請以 python3 serve.py 開啟，或確信 books.json 與本頁同目錄。", true);
+    return;
+  }
+
+  if (mode === "static" && !STATIC_HOST)
+    modebar("本機模式：改動只存在這一個瀏覽器，不會寫入檔案。要落盤請重啟 serve.py，再刷新本頁。");
+  stats(); render();
+}
+
+/* ---------- 排 ---------- */
+function groupList(){
+  const gs = ORDER.slice();
+  books.forEach(b => { const g = b.g || "未分類"; if (!gs.includes(g)) gs.push(g); });
+  return gs;
+}
+
+function numbering(){
+  const map = new Map();
+  let n = 0;
+  groupList().forEach(g => books.forEach((b, i) => {
+    if ((b.g || "未分類") === g) map.set(i, ++n);
+  }));
+  return map;
+}
+
+function metaText(b){
+  const bits = [b.a, [b.p, b.y].filter(x => x && x.trim()).join(" · ")].filter(x => x && x.trim());
+  return bits.length ? esc(bits.join("　")) : '<span class="todo">版次待補</span>';
+}
+
+/* ---------- 畫 ---------- */
+function rowView(b, i, no){
+  return '<article class="bk" data-read="' + (b.read ? 1 : 0) + '">' +
+    '<div class="bk-no">' + String(no).padStart(2, "0") + "</div>" +
+    '<div class="bk-main">' +
+      '<h3 class="bk-t">' + esc(b.t || "（未題）") + "</h3>" +
+      '<p class="bk-m">' + metaText(b) + "</p>" +
+    "</div>" +
+    '<div class="bk-r"><span class="stamp">讀過</span></div>' +
+    (b.note ? '<p class="bk-n">' + esc(b.note) + "</p>" : "") +
+  "</article>";
+}
+
+function rowEdit(b, i, no){
+  return '<article class="bk" data-read="' + (b.read ? 1 : 0) + '" data-i="' + i + '">' +
+    '<div class="bk-no">' + String(no).padStart(2, "0") + "</div>" +
+    '<div class="bk-main">' +
+      '<input class="bk-in in-t" data-f="t" value="' + esc(b.t) + '" placeholder="書名">' +
+      '<input class="bk-in in-a" data-f="a" value="' + esc(b.a) + '" placeholder="撰者">' +
+      '<input class="bk-in in-p" data-f="p" value="' + esc(b.p) + '" placeholder="出版社">' +
+      '<input class="bk-in in-y" data-f="y" value="' + esc(b.y) + '" placeholder="出版年">' +
+    "</div>" +
+    '<div class="bk-r"><button class="rd" data-act="read" aria-pressed="' + (b.read ? "true" : "false") + '">' +
+      (b.read ? "讀過" : "未讀") + "</button></div>" +
+    '<div class="bk-nrow">' +
+      '<select class="bk-in in-g" data-f="g">' +
+        groupList().map(g => '<option' + (g === (b.g || "未分類") ? " selected" : "") + ">" + esc(g) + "</option>").join("") +
+      "</select>" +
+      '<input class="bk-in in-n" data-f="note" value="' + esc(b.note) + '" placeholder="按語">' +
+      '<button class="del" data-act="del">刪除</button>' +
+    "</div>" +
+  "</article>";
+}
+
+function render(){
+  const list = document.getElementById("list");
+  const num = numbering();
+  const shown = books.map((b, i) => ({b, i}))
+    .filter(x => filter === "all" || (filter === "read" ? x.b.read : !x.b.read));
+
+  if (!shown.length){ list.innerHTML = '<p class="empty">這一欄還空着。</p>'; return; }
+
+  let html = "";
+  groupList().forEach(g => {
+    const rows = shown.filter(x => (x.b.g || "未分類") === g);
+    if (!rows.length) return;
+    const readInG = rows.filter(x => x.b.read).length;
+    html += '<section class="grp"><div class="grp-h"><h2>' + esc(g) + "</h2><span>" +
+            rows.length + " 種" + (readInG ? " · 讀過 " + readInG : "") + "</span>" +
+            (editing ? '<button class="add" data-g="' + esc(g) + '">＋ 添一種</button>' : "") +
+            "</div>" +
+            (GNOTE[g] ? '<p class="grp-n">' + esc(GNOTE[g]) + "</p>" : "");
+    rows.forEach(x => {
+      html += editing ? rowEdit(x.b, x.i, num.get(x.i)) : rowView(x.b, x.i, num.get(x.i));
+    });
+    html += "</section>";
+  });
+  list.innerHTML = html;
+}
+
+function stats(){
+  const read = books.filter(b => b.read).length, all = books.length;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set("n-all", all); set("n-read", read); set("n-left", all - read);
+  set("c-all", all); set("c-read", read); set("c-unread", all - read);
+}
+
+/* ---------- 改 ---------- */
+function setEdit(on){
+  if (STATIC_HOST) return;   // 線上不開編輯
+  if (on && pendingLocal){ say("先處置本機暫存（上欄三選一），再改", true); return; }
+  editing = on;
+  const btn = document.getElementById("btn-edit");
+  btn.setAttribute("aria-pressed", on ? "true" : "false");
+  btn.textContent = on ? "完成" : "編輯";
+  document.getElementById("bl-export").hidden = !on || mode === "server";
+  render();
+  if (on){
+    const first = document.querySelector(".in-t");
+    if (first) first.focus({preventScroll: true});
+    if (mode === "static") say("本機模式：改動暫存瀏覽器，可匯出 books.json");
+    else say("改一筆存一筆");
+  } else {
+    say("");
+  }
+}
+
+function onField(e){
+  const el = e.target.closest(".bk-in");
+  if (!el || !editing) return;
+  const art = el.closest(".bk");
+  const b = books[+art.dataset.i];
+  if (!b) return;
+  b[el.dataset.f] = el.value;
+  stats();
+  touch();
+  if (el.dataset.f === "g") render();
+}
+
+const listEl = document.getElementById("list");
+listEl.addEventListener("input", onField);
+listEl.addEventListener("change", e => { if (e.target.matches("select.bk-in")) onField(e); });
+
+listEl.addEventListener("click", e => {
+  const rd = e.target.closest("[data-act='read']");
+  if (rd && editing){
+    const art = rd.closest(".bk");
+    const b = books[+art.dataset.i];
+    b.read = !b.read;
+    rd.setAttribute("aria-pressed", b.read ? "true" : "false");
+    rd.textContent = b.read ? "讀過" : "未讀";
+    art.dataset.read = b.read ? 1 : 0;
+    stats();
+    touch();
+    return;
+  }
+  const del = e.target.closest("[data-act='del']");
+  if (del && editing){
+    const art = del.closest(".bk");
+    const i = +art.dataset.i;
+    if (!confirm("刪去「" + (books[i].t || "這一種") + "」？")) return;
+    books.splice(i, 1);
+    stats(); render(); touch();
+    return;
+  }
+  const add = e.target.closest(".add");
+  if (add && editing){
+    const g = add.dataset.g;
+    const item = {g, t: "", a: "", p: "", y: "", read: false, note: ""};
+    let at = books.length;
+    for (let i = books.length - 1; i >= 0; i--){
+      if ((books[i].g || "未分類") === g){ at = i + 1; break; }
+    }
+    books.splice(at, 0, item);
+    stats(); render(); touch();
+    const inputs = document.querySelectorAll(".bk[data-i='" + at + "'] .in-t");
+    if (inputs[0]) inputs[0].focus();
+    return;
+  }
+});
+
+document.querySelectorAll(".bl-tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    filter = btn.dataset.f;
+    document.querySelectorAll(".bl-tab").forEach(b =>
+      b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
+    render();
+  });
+});
+
+if (STATIC_HOST){
+  document.getElementById("btn-edit").hidden = true;
+  document.getElementById("bl-export").hidden = true;
+  document.getElementById("modebar").hidden = true;
+  document.getElementById("conflict").hidden = true;
+}
+
+document.getElementById("btn-edit").addEventListener("click", () => setEdit(!editing));
+
+document.getElementById("bl-export").addEventListener("click", () => {
+  download(books, "books.json");
+});
+
+document.addEventListener("keydown", e => {
+  if (STATIC_HOST) return;
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s"){
+    e.preventDefault(); clearTimeout(timer); flush();
+  }
+});
+
+boot();
+</script>
+</body>
+</html>
