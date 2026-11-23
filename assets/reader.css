@@ -86,6 +86,10 @@ a{color:inherit;text-decoration:none}
 .k-yuan{color:#7a5a1e;background:rgba(163,133,74,.15)}
 .k-guan{color:var(--red);background:rgba(156,58,48,.09)}
 .k-chuan{color:var(--jade);background:rgba(45,93,85,.11)}
+/* 《中觀論疏》三欄：所破（赭）／疏義（朱）／對頌（青） */
+.k-po{color:#7a5a1e;background:rgba(163,133,74,.15)}
+.k-shu{color:var(--red);background:rgba(156,58,48,.09)}
+.k-song{color:var(--jade);background:rgba(45,93,85,.11)}
 .k-other{color:var(--ink-3);background:rgba(33,30,25,.06)}
 .np{white-space:normal}
 .nb-i{white-space:normal}
@@ -214,7 +218,7 @@ body.ro #tip{pointer-events:none}
   flex:none;width:2.7em;text-align:right;padding-top:8px;
   font-family:var(--sans);font-size:11px;letter-spacing:.08em;color:var(--ink-3);
 }
-.ed-k.k-yuan,.ed-k.k-guan,.ed-k.k-chuan{color:var(--ink-2)}
+.ed-k.k-yuan,.ed-k.k-guan,.ed-k.k-chuan,.ed-k.k-po,.ed-k.k-shu,.ed-k.k-song{color:var(--ink-2)}
 .ed-f textarea,.ed-f input:not([type="checkbox"]){
   flex:1;min-width:0;width:auto;
   font-family:var(--serif);font-size:calc(var(--fs)*.86);line-height:1.85;color:var(--ink);
@@ -445,3 +449,31 @@ body.frontview #body{max-width:760px}
   .sec-h{margin-bottom:30px}
   .sec-h .sec-t{font-size:calc(var(--fs)*1.1);letter-spacing:.18em}
 }
+/* 疏所牒之原文（《中論》頌或青目釋）：與疏文分開，縮進、小一號、淡一檔 */
+.quote{padding-left:2em;text-indent:0;white-space:pre-line;color:var(--ink-2);
+  font-size:calc(var(--fs)*.94);line-height:1.75;margin:.2em 0 .5em}
+.qs{display:inline-block;font-size:calc(var(--fs)*.6);letter-spacing:.08em;color:var(--ink-3);
+  border:1px solid rgba(33,30,25,.18);border-radius:2px;padding:0 .35em;margin-right:.7em;
+  vertical-align:.15em;text-indent:0}
+/* 科判層級：吉藏自立的門類，作閱讀骨架，不作正文 */
+.sec{margin:1.8em 0 .7em;font-weight:500;letter-spacing:.03em;color:var(--ink);
+  border-left:2px solid rgba(156,58,48,.35);padding-left:.7em;line-height:1.5}
+.sec.lv3{font-size:calc(var(--fs)*.93);margin-left:1.2em;color:var(--ink-2);
+  border-left-color:rgba(33,30,25,.2);margin-top:1.2em}
+.sec.lv4{font-size:calc(var(--fs)*.88);margin-left:2.4em;color:var(--ink-3);
+  border-left-color:rgba(33,30,25,.14);margin-top:.9em}
+.toc-s{display:block;padding:.18em 0 .18em 1.1em;font-size:.86em;color:var(--ink-2);
+  text-decoration:none;line-height:1.5}
+.toc-s.lv3{padding-left:2em}
+.toc-s.lv4{padding-left:2.9em}
+.toc-s:hover{color:var(--red)}
+.toc-p{display:block;padding:.32em 0 .18em;font-size:.95em;color:var(--ink);font-weight:500;
+  text-decoration:none;margin-top:.35em;letter-spacing:.02em}
+.toc-p:hover{color:var(--red)}
+/* 問答分節：問頂格、答縮進一字，段間略留白 */
+.unit.qa{margin-top:.62em}
+/* 緒論小題：與科判不同，不參與分頁 */
+.sh{margin:1.6em 0 .4em;font-weight:500;letter-spacing:.04em;color:var(--ink);
+  font-size:calc(var(--fs)*.98)}
+/* 《中觀論疏》串講：與對頌（青）區別，用靛 */
+.k-chuanx{color:#5b4b8a;background:rgba(91,75,138,.10)}

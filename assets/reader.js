@@ -23,8 +23,13 @@ const escA = s => esc(s).replace(/"/g, "&quot;");
 const TEXT = document.body.dataset.text || "T42n1824";
 // 靜態託管（GitHub Pages）判別：只有本機才會有 serve.py 的 api/*
 const STATIC_HOST = !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-const SLOTS = ["原義", "觀義", "串講"];
-const KIND = { "原義": "yuan", "觀義": "guan", "串講": "chuan" };
+// 欄位（parts 的 k）可由 text/<id>.json 的 layers 指定；未指定者用舊三欄。
+// 心經、金剛經用原義／觀義／串講；《中觀論疏》用所破／疏義／對頌。
+const DEF_SLOTS = ["原義", "觀義", "串講"];
+const DEF_KIND = { "原義": "yuan", "觀義": "guan", "串講": "chuan" };
+let SLOTS = DEF_SLOTS.slice();
+let KIND = Object.assign({}, DEF_KIND);
+const ED_IDS = ["#edYuan", "#edGuan", "#edChuan", "#edFour"];
 // 舊注的層名可能仍是簡體；比對與顯示都先歸繁，免兩套寫法各認一套
 const KZ = { "原義": "原義", "觀義": "觀義", "串講": "串講" };
 const kn = k => KZ[k] || k;
@@ -224,6 +229,7 @@ async function boot() {
   MODE = DOC.mode || document.body.dataset.mode || "long";
   document.body.dataset.mode = MODE;
   META = DOC;
+  applyLayers();
   document.title = (DOC.title || "") + " · 閱讀";
 
   try {
@@ -261,8 +267,9 @@ async function boot() {
     renderAll();
   } else {
     buildToc();
-    const m = location.hash.match(/^#j(\d+)$/);
+    const m = location.hash.match(/^#s(\d+)$/), mj = location.hash.match(/^#j(\d+)$/);
     if (m) go(+m[1], true);
+    else if (mj) go(firstPageOfJuan(+mj[1]), true);
     else if (DOC.front) renderFront();   // 有目次屏的書（金剛經）：先開目次，不直接進正文
     else go(1, true);
   }
@@ -304,7 +311,7 @@ function renderFront() {
   wrap.innerHTML = "";
   wrap.appendChild(el);
   el.querySelectorAll(".front-i").forEach(a => {
-    a.onclick = e => { e.preventDefault(); go(+a.dataset.j, false, true); };
+    a.onclick = e => { e.preventDefault(); go(firstPageOfJuan(+a.dataset.j), false, true); };
   });
   document.querySelectorAll(".toc-j").forEach(a => a.classList.remove("on"));
   $("#where").innerHTML = esc(DOC.title || "") + " <em>目次</em>";
@@ -312,30 +319,100 @@ function renderFront() {
 }
 
 
+function pageOfBlock(i) {
+  let lo = 0, hi = PAGES.length - 1;
+  while (lo < hi) {
+    const mid = (lo + hi + 1) >> 1;
+    if (PAGES[mid].i <= i) lo = mid; else hi = mid - 1;
+  }
+  return lo + 1;
+}
+
 function buildToc() {
+  if (!PAGES.length) buildPages();
   const list = $("#tocList");
   list.innerHTML = "";
-  DOC.blocks.filter(b => b.k === "juan").forEach(b => {
-    const a = document.createElement("a");
-    a.className = "toc-j"; a.dataset.j = b.n; a.href = "#j" + b.n;
-    a.innerHTML = esc(b.short || b.label) + esc(b.ord || "") + "<small>" + b.page + "</small>";
-    a.onclick = e => { e.preventDefault(); go(b.n, false, true); $("#toc").classList.remove("on"); };
-    list.appendChild(a);
+  let lastJuan = null;
+  const addJuan = n => {
+    const j = DOC.blocks.find(b => b.k === "juan" && b.n === n);
+    const h = document.createElement("a");
+    h.className = "toc-j"; h.dataset.p = firstPageOfJuan(n); h.href = "#s" + firstPageOfJuan(n);
+    h.innerHTML = esc(j ? (j.short || j.label) : "") + "<small>" + esc(j ? j.page : "") + "</small>";
+    h.onclick = e => { e.preventDefault(); go(firstPageOfJuan(n), false, true); $("#toc").classList.remove("on"); };
+    list.appendChild(h);
+  };
+  DOC.blocks.forEach((b, i) => {
+    if (b.k === "juan") {
+      if (b.n !== lastJuan) { lastJuan = b.n; if (PAGES.some(p => p.juan === b.n)) addJuan(b.n); }
+      return;
+    }
+    if (b.k === "xu" || (b.k === "pin" && !b.repeat)) {
+      const a = document.createElement("a");
+      a.className = "toc-p"; a.dataset.p = pageOfBlock(i);
+      a.textContent = b.t || "";
+      a.onclick = e => { e.preventDefault(); go(pageOfBlock(i), false, true); $("#toc").classList.remove("on"); };
+      list.appendChild(a);
+      return;
+    }
+    if (b.k === "sec") {
+      const a = document.createElement("a");
+      a.className = "toc-s lv" + (b.lv || 2);
+      a.dataset.p = pageOfBlock(i);
+      a.textContent = b.t || "";
+      a.onclick = e => { e.preventDefault(); go(pageOfBlock(i), false, true); $("#toc").classList.remove("on"); };
+      list.appendChild(a);
+    }
   });
   const t = document.querySelector(".toc-t");
   if (t) t.textContent = (DOC.title || "") + " · 目錄";
 }
 
-function blocksOf(j) {
-  const out = []; let on = false;
-  for (const b of DOC.blocks) {
-    if (b.k === "juan") {
-      if (b.n === j) on = true;
-      else if (on) break;
-    }
-    if (on) out.push(b);
-  }
-  return out;
+/* 分頁單位：吉藏自立的科判（sec 塊）為頁，無科之處以品題為頁。
+   卷前的〈中論序疏〉不屬任何一卷，自成一頁，附於卷首之前。 */
+let PAGES = [], PAGE = 1;
+
+function buildPages() {
+  const B = DOC.blocks;
+  const secs = [];
+  B.forEach((b, i) => { if (b.k === "sec") secs.push(i); });
+  // 葉科：其後若無更深一層的科，即為最底層，作一頁
+  const leaf = new Set();
+  secs.forEach((i, n) => {
+    const lv = B[i].lv || 2;
+    const nx = secs[n + 1];
+    if (nx === undefined || (B[nx].lv || 2) <= lv) leaf.add(i);
+  });
+  const hasText = (a, b) => B.slice(a, b).some(x => x.k === "p" || x.k === "verse");
+  PAGES = [];
+  let juan = 1, pin = null, last = -1;
+  B.forEach((b, i) => {
+    if (b.k === "juan") juan = b.n;
+    if (b.k === "pin") pin = b;
+    const start = i === 0 || b.k === "xu" || (b.k === "pin" && !b.repeat) || leaf.has(i);
+    if (!start) return;
+    // 與上一頁之間全是科題、無正文者，并入上一頁，免得一頁只有兩個標題
+    if (PAGES.length && !hasText(last, i)) return;
+    PAGES.push({
+      i, juan,
+      pin: pin ? (pin.t || "") : "",
+      label: b.k === "sec" ? (b.t || "") : (pin ? (pin.t || "") : "序疏"),
+      lv: b.k === "sec" ? (b.lv || 2) : 0
+    });
+    last = i;
+  });
+  if (!PAGES.length) PAGES.push({ i: 0, juan: 1, pin: "", label: "", lv: 0 });
+}
+
+function pageEnd(k) {
+  return (PAGES[k + 1] ? PAGES[k + 1].i : DOC.blocks.length);
+}
+function blocksPage(k) {
+  return DOC.blocks.slice(PAGES[k].i, pageEnd(k));
+}
+function firstPageOfJuan(n) {
+  const i = DOC.blocks.findIndex(b => b.k === "juan" && b.n === n);
+  // 卷首若落在某科之中（該卷無頁首），仍指到所含之頁
+  return i < 0 ? 1 : pageOfBlock(i);
 }
 
 /* ---------- 渲染 ---------- */
@@ -362,6 +439,24 @@ function renderBlocks(frag, blocks) {
       d.innerHTML = "<h2>" + esc(b.t) + (b.repeat ? '<span style="font-size:.6em;letter-spacing:.1em;color:var(--ink-3)">（續）</span>' : "") +
         '</h2><span class="sub">' + esc(b.sub || (b.k === "xu" ? "序疏" : b.k === "pin" ? "品第" : "")) + "</span>";
       frag.appendChild(d);
+    } else if (b.k === "sh") {
+      const d = document.createElement("div");
+      d.className = "sh"; d.textContent = b.t || "";
+      frag.appendChild(d);
+    } else if (b.k === "sec") {
+      // 吉藏自己的科判，作閱讀的層級；不屬疏文，故用細線與小字
+      const d = document.createElement("div");
+      d.className = "sec lv" + (b.lv || 2);
+      d.dataset.sec = b.id;
+      d.textContent = b.t || "";
+      frag.appendChild(d);
+    } else if (b.k === "quote") {
+      // 疏所牒的原文，取自《中論》或青目釋，與疏文分開排：縮進、小一號、淡一檔
+      const d = document.createElement("div");
+      d.className = "quote";
+      d.innerHTML = '<span class="qs">' + esc(b.s || "") + "</span>" +
+        '<span class="qt">' + esc(b.t) + "</span>";
+      frag.appendChild(d);
     } else if (b.k === "byline") {
       const d = document.createElement("div");
       d.className = "byline"; d.textContent = b.t;
@@ -374,39 +469,39 @@ function renderBlocks(frag, blocks) {
   }
 }
 
-function go(j, silent, push) {
-  JUAN = j;
+function go(p, silent, push) {
+  if (!PAGES.length) buildPages();
+  p = Math.max(1, Math.min(PAGES.length, p));
+  PAGE = p;
+  JUAN = PAGES[p - 1].juan;
   document.body.classList.remove("frontview");
-  document.querySelectorAll(".toc-j").forEach(a => a.classList.toggle("on", +a.dataset.j === j));
+  document.querySelectorAll(".toc-j").forEach(a => a.classList.toggle("on", +a.dataset.p === p));
   const wrap = $("#body");
   const frag = document.createDocumentFragment();
-  renderBlocks(frag, blocksOf(j));
+  renderBlocks(frag, blocksPage(p - 1));
   wrap.innerHTML = "";
   wrap.appendChild(frag);
-  const nav = pnav(j);
+  const nav = pnav(p);
   if (nav) wrap.appendChild(nav);
   updateWhere();
   if (!silent) window.scrollTo({ top: 0, behavior: "smooth" });
-  if (push) history.pushState({ j: j }, "", "#j" + j);
-  else history.replaceState(null, "", "#j" + j);
+  if (push) history.pushState({ p: p }, "", "#s" + p);
+  else history.replaceState(null, "", "#s" + p);
 }
 
-/* 頁末翻分：一份讀完，下一份就手，不必回頭拉目次 */
-function pnav(j) {
-  const js = DOC.blocks.filter(b => b.k === "juan");
-  const i = js.findIndex(b => b.n === j);
-  if (i < 0) return null;
+/* 頁末翻頁：一科讀完，下一科就手，不必回頭拉目次 */
+function pnav(p) {
   const d = document.createElement("div");
   d.className = "pnav";
-  const prev = js[i - 1], next = js[i + 1];
-  const u = DOC.unit || "卷";   // 金剛經作「分」，論疏作「卷」
+  const prev = PAGES[p - 2], next = PAGES[p];
+  const name = x => x.lv === 0 ? x.label : (x.pin ? x.pin + "·" : "") + x.label;
   d.innerHTML =
-    (prev ? '<a class="pn-a" data-j="' + prev.n + '" href="#j' + prev.n + '">← ' + esc(prev.short) + "</a>"
+    (prev ? '<a class="pn-a" data-p="' + (p - 1) + '">← ' + esc(name(prev)) + "</a>"
           : '<span class="pn-x"></span>') +
-    '<span class="pn-c">第' + cnNum(j) + u + "　共" + cnNum(js.length) + u + "</span>" +
-    (next ? '<a class="pn-a pn-r" data-j="' + next.n + '" href="#j' + next.n + '">' + esc(next.short) + " →</a>"
+    '<span class="pn-c">' + p + " / " + PAGES.length + "</span>" +
+    (next ? '<a class="pn-a pn-r" data-p="' + (p + 1) + '">' + esc(name(next)) + " →</a>"
           : '<span class="pn-x"></span>');
-  d.querySelectorAll("a").forEach(a => a.onclick = e => { e.preventDefault(); go(+a.dataset.j); });
+  d.querySelectorAll("a").forEach(a => a.onclick = e => { e.preventDefault(); go(+a.dataset.p); });
   return d;
 }
 
@@ -466,6 +561,11 @@ function addPara(frag, p) {
 
     const el = document.createElement("p");
     el.className = "unit" + (p.dh ? " dh" : "") + (p.k === "verse" ? " verse" : "");
+    // 問答各為一節：問頂格，答縮進一字，段間留白
+    if (/^[問答]/.test(p.t || "")) {
+      el.classList.add("qa");
+      if (/^答/.test(p.t)) el.classList.add("qa-a");
+    }
     el.dataset.pid = p.id; el.dataset.start = a; el.dataset.end = b;
     el.innerHTML = html;
     frag.appendChild(el);
@@ -540,10 +640,12 @@ function updateWhere() {
       (DOC.author ? ' <em>' + esc(DOC.author) + "</em>" : "");
     return;
   }
-  const j = DOC.blocks.find(b => b.k === "juan" && b.n === JUAN);
+  const pg = PAGES[PAGE - 1] || {};
+  const j = DOC.blocks.find(b => b.k === "juan" && b.n === pg.juan);
   const label = j ? (j.short || j.label || "") : "";
-  const pin = [...document.querySelectorAll(".pin h2")].map(x => x.textContent)[0] || "";
-  $("#where").innerHTML = esc(label) + (pin ? ' <em>' + esc(pin) + "</em>" : "");
+  const pin = pg.pin || ([...document.querySelectorAll(".pin h2")].map(x => x.textContent)[0] || "");
+  const sec = pg.lv ? ' <i>' + esc(pg.label) + "</i>" : "";
+  $("#where").innerHTML = esc(label) + (pin ? ' <em>' + esc(pin) + "</em>" : "") + sec;
 }
 
 /* ---------- 點擊 ---------- */
@@ -628,7 +730,7 @@ $("#tip").onclick = () => {
 const grow = el => { el.style.height = "auto"; el.style.height = Math.min(el.scrollHeight + 2, 220) + "px"; };
 
 function growAll() {
-  ["#edYuan", "#edGuan", "#edChuan", "#edLegacy"].forEach(s => { const el = $(s); if (el) grow(el); });
+  ["#edYuan", "#edGuan", "#edChuan", "#edFour", "#edLegacy"].forEach(s => { const el = $(s); if (el) grow(el); });
 }
 
 /* ---------- 所引：一書一條，可記品名、原文與出處 ---------- */
@@ -658,6 +760,26 @@ function ensureSrcRow() {
   if (!$("#edSrcList").children.length) $("#edSrcList").appendChild(srcRow({}));
 }
 
+// 依 text JSON 的 layers 改三欄名目、占位、行數與樣式；無 layers 者不動（心經、金剛經）
+function applyLayers() {
+  const L = DOC && Array.isArray(DOC.layers) ? DOC.layers : null;
+  if (!L || !L.length) return;
+  SLOTS = L.map(l => l.k);
+  KIND = {};
+  L.forEach(l => { KIND[l.k] = l.kind || "other"; });
+  ED_IDS.forEach((sel, i) => {
+    const box = $(sel); if (!box) return;
+    const f = box.closest(".ed-f");
+    if (i >= L.length) { if (f) f.style.display = "none"; return; }   // 三欄之書不顯示第四欄
+    if (f) f.style.display = "";
+    const l = L[i];
+    const lab = f && f.querySelector(".ed-k");
+    if (lab) { lab.textContent = l.k; lab.className = "ed-k k-" + (l.kind || "other"); }
+    if (l.ph) box.placeholder = l.ph;
+    if (l.rows) box.rows = l.rows;
+  });
+}
+
 function openEditor(n, ntEl) {
   editing = { note: n, el: ntEl };
   $("#editor").classList.add("on");
@@ -669,9 +791,7 @@ function openEditor(n, ntEl) {
 
   const parts = Array.isArray(n.parts) ? n.parts : [];
   const get = k => { const p = parts.find(x => x && kn(x.k) === k); return p && p.t ? p.t : ""; };
-  $("#edYuan").value = get("原義");
-  $("#edGuan").value = get("觀義");
-  $("#edChuan").value = get("串講");
+  ED_IDS.forEach((sel, i) => { $(sel).value = SLOTS[i] ? get(SLOTS[i]) : ""; });
   const srcList = $("#edSrcList");
   srcList.innerHTML = "";
   (Array.isArray(n.src) ? n.src : []).forEach(s => srcList.appendChild(srcRow(s)));
@@ -680,7 +800,7 @@ function openEditor(n, ntEl) {
   const legacy = n.id ? (n.note || "") : "";
   $("#edLegacy").value = legacy;
   $("#edLegacyWrap").style.display = legacy ? "" : "none";
-  $("#edHint").textContent = legacy ? "舊注可剪入上三欄；留空則原樣保留" : "三欄皆可空，填一欄即可存";
+  $("#edHint").textContent = legacy ? "舊注可剪入上三欄；留空則原樣保留" : (DOC.hint || "三欄皆可空，填一欄即可存");
 
   growAll();
   // 舊注尚未分層時，光標落在舊注框裡——那才是要剪的東西
@@ -701,7 +821,7 @@ $("#edAddSrc").onclick = () => {
   $("#edSrcList").appendChild(row);
   row.querySelector(".sw").focus();
 };
-["#edYuan", "#edGuan", "#edChuan", "#edLegacy"].forEach(s => {
+["#edYuan", "#edGuan", "#edChuan", "#edFour", "#edLegacy"].forEach(s => {
   const el = $(s); if (el) el.addEventListener("input", () => grow(el));
 });
 /* 編集框內不綁任何快捷鍵：輸入法用 Esc 取消候選、用 Enter 上屏，
@@ -709,11 +829,15 @@ $("#edAddSrc").onclick = () => {
 
 function readForm() {
   const parts = [];
-  for (const k of SLOTS) {
-    const el = { "原義": "#edYuan", "觀義": "#edGuan", "串講": "#edChuan" }[k];
-    const v = $(el).value.trim();
+  ED_IDS.forEach((sel, i) => {
+    const k = SLOTS[i] || DEF_SLOTS[i];
+    const v = $(sel).value.trim();
     if (v) parts.push({ k: k, t: v });
-  }
+  });
+  // 頁面上沒有的欄（如舊稿另立之欄）原樣保留，勿因改一處而失全文
+  const known = new Set(SLOTS);
+  const old = (editing && editing.note && editing.note.parts) || [];
+  old.forEach(p => { if (p && p.k && !known.has(kn(p.k)) && p.t) parts.push(p); });
   const src = [...$("#edSrcList").querySelectorAll(".ed-srow")].map(r => ({
     w: r.querySelector(".sw").value.trim(),
     p: r.querySelector(".sp").value.trim(),
@@ -789,7 +913,7 @@ async function removeNote(id) {
 
 function rerender() {
   if (MODE === "short") renderAll(true);
-  else go(JUAN, true);
+  else go(PAGE, true);
 }
 
 function refreshTo(id) {
@@ -841,24 +965,25 @@ addEventListener("scroll", () => {
 addEventListener("keydown", e => {
   if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT" || MODE === "short" || !DOC) return;
   if (document.body.classList.contains("frontview")) return;
-  const js = DOC.blocks.filter(b => b.k === "juan");
-  if (e.key === "ArrowRight" && JUAN < js.length) go(JUAN + 1);
-  if (e.key === "ArrowLeft" && JUAN > 1) go(JUAN - 1);
+  if (e.key === "ArrowRight" && PAGE < PAGES.length) go(PAGE + 1);
+  if (e.key === "ArrowLeft" && PAGE > 1) go(PAGE - 1);
 });
 
 /* 目次屏與正文之間的前進後退：地址無 hash 即目次 */
 addEventListener("popstate", () => {
   if (!DOC) return;
-  const m = location.hash.match(/^#j(\d+)$/);
+  const m = location.hash.match(/^#s(\d+)$/), mj = location.hash.match(/^#j(\d+)$/);
   if (m) go(+m[1], true);
+  else if (mj) go(firstPageOfJuan(+mj[1]), true);
   else if (DOC.front) renderFront();
 });
 
 /* 直接改 hash（貼網址、外部連結）不一定發 popstate，補一道 */
 addEventListener("hashchange", () => {
   if (!DOC) return;
-  const m = location.hash.match(/^#j(\d+)$/);
-  if (m) { if (+m[1] !== JUAN) go(+m[1], true); }
+  const m = location.hash.match(/^#s(\d+)$/), mj = location.hash.match(/^#j(\d+)$/);
+  if (m) { if (+m[1] !== PAGE) go(+m[1], true); }
+  else if (mj) { const q = firstPageOfJuan(+mj[1]); if (q !== PAGE) go(q, true); }
   else if (DOC.front && !document.body.classList.contains("frontview")) renderFront();
 });
 

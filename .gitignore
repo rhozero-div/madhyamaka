@@ -4,16 +4,25 @@
 # 只入库线上所需者，其余留在本机
 serve.py
 *.command
+__pycache__/
+*.pyc
 
-# 《中观论疏》尚未整理完，暂不上线
-T42n1824.html
-text/T42n1824.json
-annotations/T42n1824.json
+# 《中观论疏》注释已同步至公开库；大藏经 XML 与工具大档仍留本机
 sources/
-tools/
+tools/*
+!tools/verify_quotes.py
 
 # 注文与术语的历次备份，不入库
 annotations/_*.json
 glossary/_*.json
 annotations/*.bak*.json
 glossary/*.bak*.json
+text/_*.json
+text/*.bak*.json
+
+# 书单每次落盘前留的上一版
+books.json.bak
+books.json.tmp
+
+# 私有備份倉庫（獨立 git 目錄）
+.git-private/

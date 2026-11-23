@@ -73,6 +73,9 @@ a.enter{
   background:rgba(156,58,48,.045);flex:none;white-space:nowrap;transition:.2s;
 }
 a.enter:hover{background:var(--red);color:#fdf9f2;border-color:var(--red)}
+a.enter.g{background:transparent;border-color:var(--line);color:var(--ink-2)}
+a.enter.g:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.enters{display:flex;align-items:center;gap:8px;flex:none}
 
 /* ---------- hero ---------- */
 .hero{padding:78px 0 60px;position:relative;overflow:hidden}
@@ -316,6 +319,7 @@ footer li{margin-bottom:8px;line-height:1.8;font-size:13.4px}
   nav.menu::-webkit-scrollbar{display:none}
   nav.menu a{padding:8px 9px;font-size:12px}
   a.enter{padding:6px 10px;font-size:11.5px;letter-spacing:.08em}
+  .enters{gap:6px}
   .sec-head .en{display:none}
   .ev{grid-template-columns:78px 1fr;gap:16px}
   .ev-y{font-size:10.5px;letter-spacing:0}
@@ -353,7 +357,10 @@ footer li{margin-bottom:8px;line-height:1.8;font-size:13.4px}
       <a href="#texts">經論</a>
       <a href="#compare">比較</a>
     </nav>
-    <a class="enter" href="reading.html">閱讀</a>
+    <div class="enters">
+      <a class="enter" href="reading.html">閱讀</a>
+      <a class="enter g" href="books.html">書單</a>
+    </div>
   </div>
 </header>
 
