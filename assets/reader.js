@@ -376,29 +376,45 @@ function buildPages() {
   const secs = [];
   B.forEach((b, i) => { if (b.k === "sec") secs.push(i); });
   // 葉科：其後若無更深一層的科，即為最底層，作一頁
-  const leaf = new Set();
+  // 有子科之科亦作頁首：其下先有一段總敘，若不另起一頁，科題便落在上一頁之末，
+  // 目錄一點反而跳到前一頁去。
+  const leaf = new Set(), lead = new Set();
   secs.forEach((i, n) => {
     const lv = B[i].lv || 2;
     const nx = secs[n + 1];
     if (nx === undefined || (B[nx].lv || 2) <= lv) leaf.add(i);
+    else lead.add(i);
   });
   const hasText = (a, b) => B.slice(a, b).some(x => x.k === "p" || x.k === "verse");
   PAGES = [];
-  let juan = 1, pin = null, last = -1;
-  B.forEach((b, i) => {
-    if (b.k === "juan") juan = b.n;
-    if (b.k === "pin") pin = b;
-    const start = i === 0 || b.k === "xu" || (b.k === "pin" && !b.repeat) || leaf.has(i);
-    if (!start) return;
-    // 與上一頁之間全是科題、無正文者，并入上一頁，免得一頁只有兩個標題
-    if (PAGES.length && !hasText(last, i)) return;
-    PAGES.push({
-      i, juan,
-      pin: pin ? (pin.t || "") : "",
-      label: b.k === "sec" ? (b.t || "") : (pin ? (pin.t || "") : "序疏"),
-      lv: b.k === "sec" ? (b.lv || 2) : 0
-    });
+  let juan = 1, pin = null, last = -1, pending = -1;
+  const push = (i, b, lv, label) => {
+    PAGES.push({ i, juan, pin: pin ? (pin.t || "") : "", label, lv });
     last = i;
+  };
+  B.forEach((b, i) => {
+    if (b.k === "juan") { juan = b.n; pending = i; return; }
+    if (b.k === "pin") pin = b;
+    const start = i === 0 || b.k === "xu" || (b.k === "pin" && !b.repeat) || leaf.has(i) || lead.has(i);
+    if (!start) {
+      // 卷首之後已有正文：卷首自成一頁。此頁含正文，不是只有三行的空扉頁。
+      if (pending >= 0 && (b.k === "p" || b.k === "verse")) {
+        push(pending, B[pending], 0, B[pending].short || "");
+        pending = -1;
+      }
+      return;
+    }
+    // 卷首與其後第一科同頁：卷首三行置於頁首，科題緊接其下，不另立空扉頁。
+    let from = i;
+    if (pending >= 0 && !hasText(pending + 1, i)) from = pending;
+    else if (pending >= 0) push(pending, B[pending], 0, B[pending].short || "");
+    pending = -1;
+    // 與上一頁之間全是科題、無正文者，并入上一頁，免得一頁只有兩個標題。
+    // 惟自卷首起頁者不併，否則卷首又落回上一頁之末，卷次目錄跟着跳錯。
+    if (PAGES.length && from === i && !hasText(last, i)) return;
+    const label = b.k === "sec" ? (b.t || "")
+      : (b.k === "pin" ? (pin ? (pin.t || "") : "") : "序疏");
+    push(from, b, b.k === "sec" ? (b.lv || 2) : 0, label);
   });
   if (!PAGES.length) PAGES.push({ i: 0, juan: 1, pin: "", label: "", lv: 0 });
 }
@@ -416,6 +432,45 @@ function firstPageOfJuan(n) {
 }
 
 /* ---------- 渲染 ---------- */
+/* 科判圖：以縮進樹呈現，連線由 CSS 畫。數據在 text 的 fig 塊，tree 為嵌套數組，
+   結點 {t:科文, n:附註, c:[子科]}。不屬疏文，故另立塊類，不與 sec 混。 */
+function figList(nodes, depth) {
+  const d = depth || 1;
+  const ul = document.createElement("ul");
+  nodes.forEach(n => {
+    const li = document.createElement("li");
+    // 層級寫進 data-d，字號由 CSS 按層遞減至末梢
+    li.dataset.d = String(Math.min(d, 8));
+    const s = document.createElement("span");
+    // 品名（以書名號起）落到最末一檔，與注文「所引」的書名同字號字體
+    s.className = /^〈/.test((n.t || "").trim()) ? "kn kpin" : "kn";
+    s.textContent = n.t || "";
+    li.appendChild(s);
+    if (n.n) {
+      const e = document.createElement("span");
+      e.className = "knote"; e.textContent = n.n;
+      li.appendChild(e);
+    }
+    if (n.c && n.c.length) li.appendChild(figList(n.c, d + 1));
+    ul.appendChild(li);
+  });
+  return ul;
+}
+
+function figNode(b) {
+  const d = document.createElement("figure");
+  d.className = "kepan";
+  if (b.id) d.dataset.fig = b.id;
+  const cap = document.createElement("figcaption");
+  cap.className = "kepan-h"; cap.textContent = b.t || "科判";
+  d.appendChild(cap);
+  const box = document.createElement("div");
+  box.className = "kepan-tree";
+  box.appendChild(figList(b.tree || []));
+  d.appendChild(box);
+  return d;
+}
+
 function renderBlocks(frag, blocks) {
   for (const b of blocks) {
     if (b.k === "p" || b.k === "verse") addPara(frag, b);
@@ -465,6 +520,8 @@ function renderBlocks(frag, blocks) {
       const d = document.createElement("div");
       d.className = "trailer"; d.textContent = b.t;
       frag.appendChild(d);
+    } else if (b.k === "fig") {
+      frag.appendChild(figNode(b));
     }
   }
 }

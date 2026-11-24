@@ -469,10 +469,13 @@ body.frontview #body{max-width:760px}
   border-left-color:rgba(33,30,25,.2);margin-top:1.2em}
 .sec.lv4{font-size:calc(var(--fs)*.88);margin-left:2.4em;color:var(--ink-3);
   border-left-color:rgba(33,30,25,.14);margin-top:.9em}
+.sec.lv5{font-size:calc(var(--fs)*.84);margin-left:3.5em;color:var(--ink-3);
+  border-left-color:rgba(33,30,25,.1);margin-top:.7em}
 .toc-s{display:block;padding:.18em 0 .18em 1.1em;font-size:.86em;color:var(--ink-2);
   text-decoration:none;line-height:1.5}
 .toc-s.lv3{padding-left:2em}
 .toc-s.lv4{padding-left:2.9em}
+.toc-s.lv5{padding-left:3.7em}
 .toc-s:hover{color:var(--red)}
 .toc-p{display:block;padding:.32em 0 .18em;font-size:.95em;color:var(--ink);font-weight:500;
   text-decoration:none;margin-top:.35em;letter-spacing:.02em}
@@ -484,3 +487,38 @@ body.frontview #body{max-width:760px}
   font-size:calc(var(--fs)*.98)}
 /* 《中觀論疏》串講：與對頌（青）區別，用靛 */
 .k-chuanx{color:#5b4b8a;background:rgba(91,75,138,.10)}
+
+/* 科判圖：縮進樹，連線以線條畫出。數據為 text 中的 fig 塊，非疏文。 */
+.kepan{margin:2.8em 0 .4em;padding-top:1.15em;border-top:1px solid var(--line)}
+.kepan-h{display:flex;align-items:center;gap:.8em;margin:0 0 1.1em;
+  font-family:var(--sans);font-size:10.5px;letter-spacing:.26em;color:var(--ink-3)}
+.kepan-h::after{content:"";flex:1;height:1px;background:var(--line-2)}
+.kepan-tree{line-height:1.6;color:var(--ink-2);letter-spacing:.02em}
+.kepan-tree ul{list-style:none;margin:0;padding:0}
+.kepan-tree li{position:relative;padding:.1em 0;font-size:calc(var(--fs)*1)}
+/* 結構名由高至低逐層遞減；品名（.kpin）落末檔，18px 時即 12.5px，與注文「所引」書名同字號字體 */
+.kepan-tree li[data-d="2"]{font-size:calc(var(--fs)*.93)}
+.kepan-tree li[data-d="3"]{font-size:calc(var(--fs)*.87)}
+.kepan-tree li[data-d="4"]{font-size:calc(var(--fs)*.81)}
+.kepan-tree li[data-d="5"]{font-size:calc(var(--fs)*.6944)}
+.kepan-tree li[data-d="6"]{font-size:calc(var(--fs)*.686)}
+.kepan-tree li[data-d="7"]{font-size:calc(var(--fs)*.678)}
+.kepan-tree li[data-d="8"]{font-size:calc(var(--fs)*.667)}
+.kepan-tree li[data-d="1"],.kepan-tree li[data-d="2"]{line-height:1.5}
+.kepan-tree .kpin{font-size:calc(var(--fs)*.6944);font-family:var(--serif);letter-spacing:.05em}
+.kepan-tree ul ul li{padding-left:1.05em}
+.kepan-tree ul ul li::before{content:"";position:absolute;left:0;top:0;bottom:0;
+  border-left:1px solid var(--line)}
+.kepan-tree ul ul li::after{content:"";position:absolute;left:0;top:.9em;width:.62em;
+  border-top:1px solid var(--line)}
+.kepan-tree ul ul li:last-child::before{bottom:auto;height:.9em}
+.kepan-tree > ul > li{padding-left:0}
+.kepan-tree > ul > li > .kn{color:var(--ink);font-weight:600;letter-spacing:.05em}
+.kepan-tree > ul > li > ul > li > .kn{color:var(--ink)}
+.kn{color:var(--ink-2)}
+.knote{font-style:normal;font-size:.82em;color:var(--ink-3);margin-left:.55em}
+@media (max-width:560px){
+  .kepan-tree{line-height:1.58}
+  .kepan-tree ul ul li{padding-left:.8em}
+  .knote{display:block;margin-left:0;margin-top:.06em}
+}
