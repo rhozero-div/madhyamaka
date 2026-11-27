@@ -24,5 +24,8 @@ text/*.bak*.json
 books.json.bak
 books.json.tmp
 
+# 閱讀頁截圖（貼論壇、存檔用），不入库
+_figs/
+
 # 私有備份倉庫（獨立 git 目錄）
 .git-private/
